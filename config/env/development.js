@@ -99,5 +99,14 @@ module.exports = {
         roles: ['user', 'admin']
       }
     }
+  },
+  dokku: {
+    url: process.env.DOKKU_HOST,
+    ssh: {
+      'host': process.env.DOKKU_HOST,
+      'user': process.env.DOKKU_USER,
+      'key': process.env.DOKKU_KEY,
+      'passphrase': process.env.DOKKU_PASS
+    }
   }
 };
