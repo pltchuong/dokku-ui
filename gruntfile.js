@@ -152,14 +152,15 @@ module.exports = function (grunt) {
     },
     less: {
       dist: {
-        files: [{
-          expand: true,
-          src: defaultAssets.client.less,
-          ext: '.css',
-          rename: function (base, src) {
-            return src.replace('/less/', '/css/');
-          }
-        }]
+        options: {
+          sourceMap: true,
+          sourceMapURL: '/application.min.css.map',
+          ieCompat:true,
+          dumpLineNumbers: true
+        },
+        files: {
+          'public/application.min.css': defaultAssets.client.less
+        }
       }
     },
     'node-inspector': {
