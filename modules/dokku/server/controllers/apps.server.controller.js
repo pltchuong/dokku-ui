@@ -25,9 +25,14 @@ exports.read = co.wrap(function (req, res) {
 /**
  * Update a App
  */
-exports.update = function (req, res) {
-
-};
+exports.update = co.wrap(function* (req, res) {
+  try {
+    yield App.findOneAndUpdate({_id: req.body._id}, req.body);
+    res.json(req.body);
+  } catch(err) {
+    res.status(400).send(err);
+  }
+});
 
 /**
  * Delete an App
@@ -53,7 +58,7 @@ exports.list = co.wrap(function* (req, res) {
  */
 exports.findAppByIdOrName = co.wrap(function* (req, res, next, appIdOrName) {
   try {
-    var app = yield App.findOne({ $or:[{ _id : appIdOrName }, { name: appIdOrName }] }).populate('domains').exec();
+    var app = yield App.findOne({ $or:[{ _id : appIdOrName }, { name: appIdOrName }] }).populate('domains').populate('collaborators').exec();
     if(app) {
       req.app = app;
       next();

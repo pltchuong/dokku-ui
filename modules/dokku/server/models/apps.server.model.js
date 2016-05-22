@@ -19,6 +19,10 @@ var AppSchema = new Schema({
     type: String,
     ref: 'Domain'
   }],
+  collaborators: [{
+    type: String,
+    ref: 'User'
+  }],
   created_at: Date,
   updated_at: Date
 });

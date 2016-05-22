@@ -9,6 +9,7 @@ module.exports = function(app) {
   ;
   app.route('/api/apps/:appIdOrName')
     .get(apps.read)
+    .put(apps.update)
     .delete(apps.delete)
   ;
 

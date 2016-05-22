@@ -1,0 +1,227 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway:400,300,600);
+@import url(https://fonts.googleapis.com/css?family=Lora);
+
+@import "../../../../public/lib/bootstrap/less/bootstrap.less";
+@import "../../../../public/lib/jasny-bootstrap/less/jasny-bootstrap.less";
+@import (less) "../../../../public/lib/angular-ui-select/dist/select.css";
+
+@font-family-base: 'Raleway';
+@brand-primary: #2a8fbd;
+
+body {
+  padding: 50px 0 0 0;
+
+  @media (min-width: @screen-md-min) {
+    padding: 0 0 0 300px;
+  }
+}
+
+.btn {
+  font-weight: bold;
+}
+
+.logo {
+  display: inline-block !important;
+  margin-right: 10px;
+}
+
+.navmenu {
+  padding-top: 50px;
+
+  @media (min-width: @screen-md-min) {
+    padding-top: 0;
+  }
+}
+
+.navbar {
+  text-align: center;
+
+  @media (min-width: @screen-md-min) {
+    display: none !important; /* IE8 fix */
+  }
+
+  .navbar-brand {
+    display: inline-block;
+    float: none;
+  }
+
+  .navbar-toggle {
+    position: absolute;
+    float: left;
+    margin-left: 15px;
+
+    @media (min-width: 1px) {
+      display: block !important;
+    }
+  }
+}
+
+.container {
+  max-width: 100%;
+}
+
+.dokku-menu {
+  background: @brand-primary;
+  border: none;
+
+  .navmenu-brand {
+    padding: 20px 15px 20px 145px;
+    font-family: 'Lora';
+    font-size: 35px;
+    letter-spacing: 5px;
+    color: #000 !important;
+    background: #fff !important;
+    margin: 0;
+
+    .logo {
+      position: absolute;
+      top: -20px;
+      left: -30px;
+      width: 150px;
+      z-index: 10;
+    }
+  }
+
+  .nav.navmenu-nav {
+
+    li {
+      &:first-child {
+        padding: 15px;
+      }
+
+      &.active {
+        a {
+          background: #fff;
+          color: @brand-primary;
+        }
+      }
+
+      a {
+        color: #fff;
+      }
+    }
+  }
+}
+
+.dokku-submenu {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 9px;
+  border-bottom: 1px @hr-border solid;
+  text-align: center;
+  line-height: 30px;
+  position: relative;
+
+  h4 {
+    font-weight: bold;
+
+    @media (min-width: @screen-md-min) {
+      position: absolute;
+      top: -10px;
+      left: 0;
+    }
+  }
+
+  .sub-nav-item {
+    display: inline-block;
+    margin-left: 7px;
+    margin-right: 7px;
+    color: #7D7D8E;
+    position: relative;
+    outline: none;
+    text-decoration: none;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &:after {
+      content: ' ';
+      display: block;
+      height: 1px;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -10px;
+    }
+
+    &:hover {
+      text-decoration: none;
+
+      &:after {
+        background: @brand-primary;
+      }
+    }
+
+    &.active {
+      color: @brand-primary;
+
+      &:after {
+        background: @brand-primary;
+      }
+    }
+
+    i {
+      font-size: 20px;
+      top: 5px;
+    }
+  }
+}
+
+.dokku-list-fields {
+  margin-bottom: 0;
+
+  li:last-child .form-group {
+    margin-bottom: 0;
+  }
+
+  .form-control {
+    @media (max-width: @screen-xs-max) {
+      margin-bottom: 5px;
+    }
+  }
+
+  .btn-group {
+    width: 100%;
+
+    .btn {
+      padding-left: 0;
+      padding-right: 0;
+      width: 50%;
+    }
+  }
+}
+
+.dokku-info {
+
+  h1 {
+    margin: 0;
+    font-weight: 600;
+  }
+
+  dd {
+    margin-bottom: 12px;
+    word-break: break-all;
+  }
+}
+
+footer {
+  font-size: 12px;
+  line-height: 60px;
+  border-top: 1px @hr-border solid;
+  margin-top: 20px;
+}
+
+.ui-select-match-item {
+  .btn-primary();
+  .btn-sm();
+
+  .close {
+    color: #fff;
+    opacity: 1;
+  }
+}
