@@ -1,26 +1,20 @@
 {
   "name": "dokku-ui",
-  "description": "Dokku UI",
-  "homepage": "http://meanjs.org/",
-  "license": "MIT",
+  "version": "0.0.0",
   "dependencies": {
-    "bootstrap": "~3",
-    "angular": "~1.3",
-    "angular-sanitize": "~1.3",
-    "angular-resource": "~1.3",
-    "angular-animate": "~1.3",
-    "angular-mocks": "~1.3",
-    "angular-bootstrap": "~0.13",
-    "angular-ui-utils": "bower",
-    "angular-ui-router": "~0.2",
-    "angular-file-upload": "1.1.5",
-    "angular-messages": "~1.3.17",
-    "owasp-password-strength-test": "~1.3.0",
-    "jasny-bootstrap": "~3.1.3",
-    "angular-modal-service": "~0.9.10",
-    "angular-ui-select": "~0.16.1"
+    "angular": "~1.5.0",
+    "json3": "~3.3.1",
+    "es5-shim": "~3.0.1",
+    "bootstrap": "~3.1.1",
+    "angular-resource": "~1.5.0",
+    "angular-cookies": "~1.5.0",
+    "angular-sanitize": "~1.5.0",
+    "font-awesome": ">=4.1.0",
+    "lodash": "~2.4.1",
+    "angular-socket-io": "~0.7.0",
+    "angular-ui-router": "~0.2.15"
   },
-  "resolutions": {
-    "angular": "~1.3"
+  "devDependencies": {
+    "angular-mocks": "~1.5.0"
   }
 }
