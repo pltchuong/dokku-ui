@@ -27,7 +27,7 @@ exports.read = co.wrap(function (req, res) {
  */
 exports.update = co.wrap(function* (req, res) {
   try {
-    yield App.findOneAndUpdate({_id: req.body._id}, req.body);
+    yield App.findOneAndUpdate({ _id: req.body._id }, req.body);
     res.json(req.body);
   } catch(err) {
     res.status(400).send(err);
