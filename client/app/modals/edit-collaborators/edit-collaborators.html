@@ -1,0 +1,25 @@
+<div class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" ng-click="vm.close()" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title text-center">Edit collaborators</h4>
+      </div>
+      <div class="modal-body">
+        <ui-select multiple sortable="true" ng-model="vm.inputs.collaborators" close-on-select="false">
+          <ui-select-match>{{$item.firstName}} {{$item.lastName}}</ui-select-match>
+          <ui-select-choices repeat="user in vm.inputs.users | filter: $select.search">
+            <div ng-bind-html="user.firstName + ' ' + user.lastName | highlight: $select.search"></div>
+            <small>
+              <span ng-bind-html="user.username | highlight: $select.search"></span> 
+              &lt;<span ng-bind-html="user.email | highlight: $select.search"></span>&gt;
+            </small>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-block btn-primary" ng-click="vm.close()" data-dismiss="modal">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

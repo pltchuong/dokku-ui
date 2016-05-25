@@ -1,8 +1,13 @@
 'use strict';
 
-class NavbarController {}
+class NavbarController {
 
-//end-non-standard
+  constructor($http, $scope) {
+    $http.get('/api/apps').then(function(response) {
+      $scope.apps = response.data;
+    });
+  }
+}
 
 angular.module('dokkuUiApp')
   .controller('NavbarController', NavbarController);

@@ -17,13 +17,15 @@ function respondWithResult(res, statusCode) {
   return function(entity) {
     if (entity) {
       res.status(statusCode).json(entity);
+      return entity;
     }
+    return null;
   };
 }
 
 function saveUpdates(updates) {
   return function(entity) {
-    var updated = _.merge(entity, updates);
+    var updated = _.extend(entity, updates);
     return updated.save()
       .then(updated => {
         return updated;

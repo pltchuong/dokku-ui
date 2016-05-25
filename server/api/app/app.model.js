@@ -9,8 +9,11 @@ var AppSchema = new mongoose.Schema({
   git_url: String,
   configs: mongoose.Schema.Types.Mixed,
   domains: [{
-    type: String,
-    ref: 'Domain'
+    hostname: String,
+    cname: String,
+    kind: String,
+    created_at: Date,
+    updated_at: Date
   }],
   collaborators: [{
     type: String,

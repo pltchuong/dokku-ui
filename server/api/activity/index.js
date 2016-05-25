@@ -1,8 +1,7 @@
 'use strict';
 
 var express = require('express');
-var controller = require('./app.controller');
-var activity = require('../activity/activity.controller');
+var controller = require('./activity.controller');
 
 var router = express.Router();
 
@@ -12,7 +11,5 @@ router.post('/', controller.create);
 router.put('/:id', controller.update);
 router.patch('/:id', controller.update);
 router.delete('/:id', controller.destroy);
-
-router.get('/:id/activities', activity.index);
 
 module.exports = router;
