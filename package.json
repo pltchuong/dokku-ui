@@ -105,11 +105,6 @@
     "npm": "^2.14.20"
   },
   "scripts": {
-    "test": "grunt test",
-
-    "update-webdriver": "node node_modules/protractor/bin/webdriver-manager update",
-
-    "start": "node dist/server/",
     "postinstall": "./node_modules/bower/bin/bower install; ./node_modules/grunt-cli/bin/grunt build;"
   },
   "private": true
