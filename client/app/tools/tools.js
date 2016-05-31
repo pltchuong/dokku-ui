@@ -6,7 +6,7 @@ angular.module('dokkuUiApp')
       .state('activities', {
         url: '/activities',
         templateUrl: 'app/tools/activities/activities.html',
-        controller: 'ActivitiesController',
+        controller: 'AllActivitiesController',
         controllerAs: 'vm'
       });
   });

@@ -1,6 +1,6 @@
 'use strict';
 
-class ActivitiesController {
+class AllActivitiesController {
   constructor($http) {
     this.$http = $http;
     this.fetch();
@@ -14,4 +14,4 @@ class ActivitiesController {
 }
 
 angular.module('dokkuUiApp')
-  .controller('ActivitiesController', ActivitiesController);
+  .controller('AllActivitiesController', AllActivitiesController);
