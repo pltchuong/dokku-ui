@@ -233,11 +233,23 @@ footer {
   }
 }
 
+.loading {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: url('/assets/images/loading.gif') no-repeat center center rgba(255, 255, 255, 0.8);
+  z-index: 999999999999;
+  display: none;
+}
+
 /* inject:less */
 @import 'apps/access/access.less';
 @import 'apps/activities/activities.less';
 @import 'apps/overview/overview.less';
 @import 'apps/settings/settings.less';
 @import 'main/main.less';
+@import 'tools/activities/activities.less';
 @import '../components/footer/footer.less';
 /* endinject */

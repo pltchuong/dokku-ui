@@ -1,10 +1,10 @@
 <section>
   <div class="nav nav-tabs dokku-submenu">
-    <h4 class="text-primary">{{app.name}}</h4>
-    <a class="sub-nav-item active" href="/apps/{{app.name}}"><i class="glyphicon glyphicon-dashboard"></i> &nbsp; Overview</a>
-    <a class="sub-nav-item" href="/apps/{{app.name}}/activities"><i class="glyphicon glyphicon-cloud-upload"></i> &nbsp; Activities</a>
-    <a class="sub-nav-item" href="/apps/{{app.name}}/access"><i class="glyphicon glyphicon-user"></i> &nbsp; Access</a>
-    <a class="sub-nav-item" href="/apps/{{app.name}}/settings"><i class="glyphicon glyphicon-cog"></i> &nbsp; Setting</a>
+    <h4 class="text-primary">{{vm.$stateParams.app}}</h4>
+    <a class="sub-nav-item active" href="/apps/{{vm.$stateParams.app}}"><i class="glyphicon glyphicon-dashboard"></i> &nbsp; Overview</a>
+    <a class="sub-nav-item" href="/apps/{{vm.$stateParams.app}}/activities"><i class="glyphicon glyphicon-cloud-upload"></i> &nbsp; Activities</a>
+    <a class="sub-nav-item" href="/apps/{{vm.$stateParams.app}}/access"><i class="glyphicon glyphicon-user"></i> &nbsp; Access</a>
+    <a class="sub-nav-item" href="/apps/{{vm.$stateParams.app}}/settings"><i class="glyphicon glyphicon-cog"></i> &nbsp; Setting</a>
   </div>
 
   <div class="row">
@@ -14,13 +14,13 @@
     <div class="col-md-8">
       <dl class="dl-horizontal dokku-info">
         <dt>Web URL</dt>
-        <dd>{{app.web_url}}</dd>
+        <dd>{{vm.app.web_url}}</dd>
         <dt>Git URL</dt>
-        <dd>{{app.git_url}}</dd>
+        <dd>{{vm.app.git_url}}</dd>
         <dt>Created at</dt>
-        <dd>{{app.created_at}}</dd>
+        <dd>{{vm.app.created_at | date:'medium'}}</dd>
         <dt>Updated at</dt>
-        <dd>{{app.updated_at}}</dd>
+        <dd>{{vm.app.updated_at | date:'medium'}}</dd>
       </dl>
     </div>
   </div>
@@ -34,7 +34,7 @@
     </div>
     <div class="col-md-8">
       <ul class="list-unstyled dokku-list-fields">
-        <li ng-repeat="config in app.configs">
+        <li ng-repeat="config in vm.app.configs | orderBy: 'key'">
           <div ng-repeat="(key, value) in config" class="form-group">
             <div class="row">
               <div class="col-sm-5">
@@ -64,17 +64,17 @@
     </div>
     <div class="col-md-8">
       <h5>Dokku domain</h5>
-      <input type="text" class="form-control" ng-model="app.domains[0].hostname" />
+      <input type="text" class="form-control" ng-model="vm.app.domains[0].hostname" />
       <br/>
       <h5>Custom Domains</h5>
-      <div ng-show="app.domains.length == 1" class="panel panel-default">
+      <div ng-show="vm.app.domains.length == 1" class="panel panel-default">
         <div class="panel-body text-center">
           <h4>Custom domains will appear here</h4>
           <small>Custom domains allow you to access your app via one or more non-Heroku domain names (for example, <code>www.yourcustomdomain.com)</code></small>
         </div>
       </div>
       <ul class="list-unstyled dokku-list-fields">
-        <li ng-repeat="domain in app.domains" ng-show="$index > 0">
+        <li ng-repeat="domain in vm.app.domains" ng-show="$index > 0">
           <div class="form-group">
             <div class="row">
               <div class="col-sm-5">

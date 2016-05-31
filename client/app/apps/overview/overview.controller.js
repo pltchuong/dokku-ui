@@ -2,8 +2,7 @@
 
 class OverviewController {
 
-  constructor($rootScope, $stateParams, $http, $location, ModalService) {
-    this.$rootScope = $rootScope;
+  constructor($stateParams, $http, $location, ModalService) {
     this.$stateParams = $stateParams;
     this.$http = $http;
     this.$location = $location;
@@ -14,7 +13,7 @@ class OverviewController {
   fetch() {
     if(this.$stateParams.app) {
       this.$http.get('/api/apps/' + this.$stateParams.app).then(response => {
-        this.$rootScope.app = response.data;
+        this.app = response.data;
       });
     } else {
       this.$location.path('/apps');

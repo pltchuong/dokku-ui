@@ -36,10 +36,28 @@ angular.module('dokkuUiApp')
 
     $httpProvider.interceptors.push(function($q, $location) {
       return {
+        request: function (config) {
+          jQuery('.loading').stop().fadeIn();
+          return config;
+        },
+        requestError: function(rejection) {
+          jQuery('.loading').stop().fadeOut();
+          return $q.reject(rejection);
+        },
+        response: function(response) {
+          jQuery('.loading').stop().fadeOut();
+          return response;
+        },
         responseError: function(rejection) {
+          jQuery('.loading').stop().fadeOut();
           $location.path('/' + rejection.status);
           return $q.reject(rejection);
         }
       };
     });
-  });
+  })
+  .run(['$rootScope', '$state', '$stateParams',
+    function ($rootScope, $state, $stateParams) {
+      $rootScope.$stateParams = $stateParams;
+  }])
+;

@@ -3,7 +3,7 @@
   <ul class="nav navmenu-nav">
     <li><input type="text" class="form-control" ng-model="search.name" /></li>
     <li><a href="javascript: void(0)" ng-click="createApp()"><i class="glyphicon glyphicon-plus"></i> New application</a></li>
-    <li ng-repeat="app in apps | filter:search:strict" ng-class="{active: $root.app.name == app.name}"><a href="/apps/{{app.name}}">{{app.name}}</a></li>
+    <li ng-repeat="app in apps | filter:search:strict" ng-class="{active: current_app == app.name}"><a href="/apps/{{app.name}}">{{app.name}}</a></li>
   </ul>
 </div>
 
