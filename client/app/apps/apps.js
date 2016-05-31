@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dokkuUiApp')
-  .config(function ($stateProvider) {
+  .config(function ($stateProvider, $httpProvider) {
     $stateProvider
       .state('app-overview', {
         url: '/apps/:app',
@@ -26,5 +26,20 @@ angular.module('dokkuUiApp')
         templateUrl: 'app/apps/settings/settings.html',
         controller: 'SettingsController',
         controllerAs: 'vm'
-      });
+      })
+
+      .state('404', {
+        url: '/404',
+        templateUrl: 'app/apps/errors/404.html'
+      })
+    ;
+
+    $httpProvider.interceptors.push(function($q, $location) {
+      return {
+        responseError: function(rejection) {
+          $location.path('/' + rejection.status);
+          return $q.reject(rejection);
+        }
+      };
+    });
   });
