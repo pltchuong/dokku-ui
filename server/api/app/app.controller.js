@@ -72,7 +72,11 @@ function appIdOrName(appIdOrName) {
 
 // Gets a list of Apps
 export function index(req, res) {
-  return App.find().populate('collaborators').exec()
+  return App
+    .find()
+    .sort('name')
+    .populate('collaborators')
+    .exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
