@@ -11,6 +11,7 @@
 
 import _ from 'lodash';
 import App from './app.model';
+import Activity from '../activity/activity.model';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -114,4 +115,18 @@ export function destroy(req, res) {
     .then(handleEntityNotFound(res))
     .then(removeEntity(res))
     .catch(handleError(res));
+}
+
+// Get App's activities
+export function activities(req, res) {
+  return App.findOne(appIdOrName(req.params.id)).exec()
+    .then(function(app) {
+      return Activity.find({app: app._id})
+        .populate('user', 'username firstName lastName email')
+        .populate('app', 'name')
+        .sort('-updated_at')
+        .exec()
+        .then(respondWithResult(res))
+        .catch(handleError(res));
+    });
 }

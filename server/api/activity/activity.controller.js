@@ -11,7 +11,6 @@
 
 import _ from 'lodash';
 import Activity from './activity.model';
-import App from '../app/app.model';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -62,27 +61,15 @@ function handleError(res, statusCode) {
   };
 }
 
-function appIdOrName(appIdOrName) {
-  return {
-    $or:[
-      {_id : appIdOrName},
-      {name: appIdOrName}
-    ]
-  };
-}
-
 // Gets a list of Activitys
 export function index(req, res) {
-  return App.findOne(appIdOrName(req.params.id)).exec()
-    .then(function(app) {
-      return Activity.find({app: app._id})
-        .populate('user', 'username firstName lastName email')
-        .populate('app', 'name')
-        .sort('field -updated_at')
-        .exec()
-        .then(respondWithResult(res))
-        .catch(handleError(res));
-    });
+  return Activity.find()
+    .populate('user', 'username firstName lastName email')
+    .populate('app', 'name')
+    .sort('-updated_at')
+    .exec()
+    .then(respondWithResult(res))
+    .catch(handleError(res));
 }
 
 // Gets a single Activity from the DB
