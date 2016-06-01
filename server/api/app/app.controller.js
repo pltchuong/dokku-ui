@@ -73,10 +73,9 @@ function appIdOrName(appIdOrName) {
 
 // Gets a list of Apps
 export function index(req, res) {
-  return App
-    .find()
+  return App.find()
     .sort('name')
-    .populate('collaborators')
+    .populate('collaborators', 'username firstName lastName email')
     .exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
@@ -84,7 +83,9 @@ export function index(req, res) {
 
 // Gets a single App from the DB
 export function show(req, res) {
-  return App.findOne(appIdOrName(req.params.id)).populate('collaborators').exec()
+  return App.findOne(appIdOrName(req.params.id))
+    .populate('collaborators', 'username firstName lastName email')
+    .exec()
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
@@ -120,6 +121,7 @@ export function destroy(req, res) {
 // Get App's activities
 export function activities(req, res) {
   return App.findOne(appIdOrName(req.params.id)).exec()
+    .then(handleEntityNotFound(res))
     .then(function(app) {
       return Activity.find({app: app._id})
         .populate('user', 'username firstName lastName email')
@@ -129,4 +131,12 @@ export function activities(req, res) {
         .then(respondWithResult(res))
         .catch(handleError(res));
     });
+}
+
+// Updates App's config
+export function configs(req, res) {
+  return App.findOne(appIdOrName(req.params.id)).exec()
+    .then(handleEntityNotFound(res))
+    .then(respondWithResult(res))
+    .catch(handleError(res));
 }

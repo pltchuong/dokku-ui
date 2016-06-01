@@ -12,5 +12,6 @@ router.patch('/:id', controller.update);
 router.delete('/:id', controller.destroy);
 
 router.get('/:id/activities', controller.activities);
+router.patch('/:id/configs', controller.configs);
 
 module.exports = router;

@@ -14,11 +14,18 @@
       </fieldset>
       <table class="table table-striped">
         <tbody>
-          <tr ng-repeat="activity in vm.activities | filter:filterActivities | filter:'!git-'">
+          <tr ng-repeat="activity in vm.activities | filter:filterActivities">
             <td width="20%"><b>{{activity.user.firstName}} {{activity.user.lastName}}</b> <small>({{activity.user.username}})</small></td>
             <td>
-              <code>{{activity.command}} {{activity.app.name}} {{activity.params}}</code> &nbsp;
-              <small class="text-muted" am-time-ago="activity.updated_at"></small>
+              <div ng-show="activity.status">
+                <span ng-class="{'text-success': activity.status == 'finished', 'text-danger': activity.status == 'error'}">Build {{activity.status}}</span><br/>
+                <small class="text-muted" am-time-ago="activity.updated_at"></small> &bull;
+                <small><a href="/apps/{{vm.$stateParams.app}}/builds/{{activity._id}}">View build log</a></small>
+              </div>
+              <div ng-hide="activity.status">
+                <code>{{activity.output}}</code><br/>
+                <small class="text-muted" am-time-ago="activity.updated_at"></small>
+              </div>
             </td>
           </tr>
         </tbody>

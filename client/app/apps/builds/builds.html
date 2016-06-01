@@ -1,0 +1,15 @@
+<section>
+  <div class="nav nav-tabs dokku-submenu">
+    <h4 class="text-primary">{{vm.$stateParams.app}}</h4>
+    <a class="sub-nav-item" href="/apps/{{vm.$stateParams.app}}"><i class="glyphicon glyphicon-dashboard"></i> &nbsp; Overview</a>
+    <a class="sub-nav-item active" href="/apps/{{vm.$stateParams.app}}/activities"><i class="glyphicon glyphicon-cloud-upload"></i> &nbsp; Activities</a>
+    <a class="sub-nav-item" href="/apps/{{vm.$stateParams.app}}/access"><i class="glyphicon glyphicon-user"></i> &nbsp; Access</a>
+    <a class="sub-nav-item" href="/apps/{{vm.$stateParams.app}}/settings"><i class="glyphicon glyphicon-cog"></i> &nbsp; Setting</a>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <pre>{{vm.activity.output}}</pre>
+    </div>
+  </div>
+</section>

@@ -7,7 +7,7 @@ var AppSchema = new mongoose.Schema({
   name: String,
   web_url: String,
   git_url: String,
-  configs: mongoose.Schema.Types.Mixed,
+  configs: [mongoose.Schema.Types.Mixed],
   domains: [{
     hostname: String,
     cname: String,

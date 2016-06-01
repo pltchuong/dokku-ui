@@ -20,6 +20,15 @@ class OverviewController {
     }
   }
 
+  addConfig() {
+    var config = {};
+    config[this.key] = this.value;
+    this.$http.patch('/api/apps/' + this.$stateParams.app + '/configs', config).then(response => {
+      this.key = this.value = null;
+      this.fetch();
+    });
+  }
+
   editConfig(key, value) {
     this.ModalService.showModal({
       templateUrl: 'app/modals/edit-config/edit-config.html',
@@ -29,10 +38,15 @@ class OverviewController {
         key: key,
         value: value
       }
-    }).then(function(modal) {
+    }).then(modal => {
       modal.element.modal();
-      modal.close.then(function(result) {
-        console.log(result);
+      modal.close.then(result => {
+        var config = {};
+        config[result.key] = result.value;
+        this.$http.patch('/api/apps/' + this.$stateParams.app + '/configs', config).then(response => {
+          this.key = this.value = null;
+          this.fetch();
+        });
       });
     });
   };
@@ -46,10 +60,15 @@ class OverviewController {
         key: key,
         value: value
       }
-    }).then(function(modal) {
+    }).then(modal => {
       modal.element.modal();
-      modal.close.then(function(result) {
-        console.log(result);
+      modal.close.then(result => {
+        var config = {};
+        config[result.key] = null;
+        this.$http.patch('/api/apps/' + this.$stateParams.app + '/configs', config).then(response => {
+          this.key = this.value = null;
+          this.fetch();
+        });
       });
     });
   };

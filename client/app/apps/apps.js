@@ -27,6 +27,12 @@ angular.module('dokkuUiApp')
         controller: 'SettingsController',
         controllerAs: 'vm'
       })
+      .state('app-builds', {
+        url: '/apps/:app/builds/:build',
+        templateUrl: 'app/apps/builds/builds.html',
+        controller: 'BuildsController',
+        controllerAs: 'vm'
+      })
 
       .state('404', {
         url: '/404',

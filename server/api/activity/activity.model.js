@@ -6,7 +6,6 @@ var ActivitySchema = new mongoose.Schema({
   _id: String,
   command: String,
   params: String,
-  _id: String,
   app: {
     type: String,
     ref: 'App'
