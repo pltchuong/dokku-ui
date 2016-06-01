@@ -8,6 +8,11 @@ class BuildsController {
     this.$location = $location;
     this.ModalService = ModalService;
     this.fetch();
+
+    var controller = this;
+    setInterval(function() {
+      controller.fetch();
+    }, 1000);
   }
 
   fetch() {
