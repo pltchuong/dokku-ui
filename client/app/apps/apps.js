@@ -40,10 +40,12 @@ angular.module('dokkuUiApp')
       })
     ;
 
-    $httpProvider.interceptors.push(function($q, $location) {
+    $httpProvider.interceptors.push(function($q) {
       return {
         request: function (config) {
-          jQuery('.loading').stop().fadeIn();
+          if(!config.silence) {
+            jQuery('.loading').stop().fadeIn();
+          }
           return config;
         },
         requestError: function(rejection) {
@@ -56,7 +58,6 @@ angular.module('dokkuUiApp')
         },
         responseError: function(rejection) {
           jQuery('.loading').stop().fadeOut();
-          $location.path('/' + rejection.status);
           return $q.reject(rejection);
         }
       };

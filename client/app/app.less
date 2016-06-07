@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Raleway:400,300,600);
+@import url(https://fonts.googleapis.com/css?family=Maven+Pro:300,400,700);
 @import url(https://fonts.googleapis.com/css?family=Lora);
 
 @import '../bower_components/bootstrap/less/bootstrap.less';
@@ -8,7 +8,7 @@
 
 @icon-font-path: '../bower_components/bootstrap/fonts/';
 @fa-font-path: '../bower_components/font-awesome/fonts';
-@font-family-base: 'Raleway';
+@font-family-base: 'Maven Pro';
 @brand-primary: #2a8fbd;
 @state-success-text: #74C080;
 
@@ -106,6 +106,7 @@ body {
 
       a {
         color: #fff;
+        font-size: 16px;
       }
     }
   }
@@ -159,6 +160,7 @@ body {
 
     &:hover {
       text-decoration: none;
+      color: @brand-primary;
 
       &:after {
         background: @brand-primary;
@@ -219,9 +221,14 @@ body {
 
 footer {
   font-size: 12px;
-  line-height: 60px;
   border-top: 1px @hr-border solid;
   margin-top: 20px;
+  text-align: center;
+  padding: 10px 0;
+
+  p {
+    margin: 0;
+  }
 }
 
 .ui-select-match-item {
@@ -246,12 +253,4 @@ footer {
 }
 
 /* inject:less */
-@import 'apps/access/access.less';
-@import 'apps/activities/activities.less';
-@import 'apps/builds/builds.less';
-@import 'apps/overview/overview.less';
-@import 'apps/settings/settings.less';
-@import 'main/main.less';
-@import 'tools/activities/activities.less';
-@import '../components/footer/footer.less';
 /* endinject */

@@ -12,12 +12,14 @@ class BuildsController {
 
   fetch() {
     if(this.$stateParams.app) {
-      this.$http.get('/api/activities/' + this.$stateParams.build).then(response => {
+      this.$http.get('/api/activities/' + this.$stateParams.build, {silence: true}).then(response => {
         this.activity = response.data;
 
-        setTimeout(() => {
-          this.fetch();
-        }, 2000);
+        if(this.activity.status == 'running') {
+          setTimeout(() => {
+            this.fetch();
+          }, 2000);
+        }
       });
     } else {
       this.$location.path('/apps');
