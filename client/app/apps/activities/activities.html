@@ -18,7 +18,7 @@
             <td width="20%"><b>{{activity.user.firstName}} {{activity.user.lastName}}</b> <small>({{activity.user.username}})</small></td>
             <td>
               <div ng-show="activity.status">
-                <span ng-class="{'text-success': activity.status == 'finished', 'text-danger': activity.status == 'failed'}">{{activity.action}} - Build {{activity.status}}</span><br/>
+                <span ng-class="{'text-success': activity.status == 'succeeded', 'text-danger': activity.status == 'failed'}">{{activity.command}} - Build {{activity.status}}</span><br/>
                 <small class="text-muted" am-time-ago="activity.updated_at"></small> &bull;
                 <small><a href="/apps/{{vm.$stateParams.app}}/builds/{{activity._id}}">View build log</a></small>
               </div>
