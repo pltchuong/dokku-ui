@@ -25,6 +25,9 @@ module.exports = function(config) {
       'client/bower_components/angular-modal-service/dst/angular-modal-service.js',
       'client/bower_components/angular-ui-select/dist/select.js',
       'client/bower_components/moment/moment.js',
+      'client/bower_components/angular-moment/angular-moment.js',
+      'client/bower_components/angular-auto-height/dist/auto-height.js',
+      'client/bower_components/angular-scroll-glue/src/scrollglue.js',
       'client/bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'node_modules/socket.io-client/socket.io.js',
