@@ -17,15 +17,13 @@
           <tr ng-repeat="activity in vm.activities | filter:filterActivities">
             <td width="20%"><b>{{activity.user.firstName}} {{activity.user.lastName}}</b> <small>({{activity.user.username}})</small></td>
             <td>
-              <div ng-show="activity.status">
-                <span ng-class="{'text-success': activity.status == 'succeeded', 'text-danger': activity.status == 'failed'}">{{activity.command}} - Build {{activity.status}}</span><br/>
-                <small class="text-muted" am-time-ago="activity.updated_at"></small> &bull;
-                <small><a href="/apps/{{vm.$stateParams.app}}/builds/{{activity._id}}">View build log</a></small>
-              </div>
-              <div ng-hide="activity.status">
-                <code>{{activity.output}}</code><br/>
-                <small class="text-muted" am-time-ago="activity.updated_at"></small>
-              </div>
+              <code>{{activity.command}}</code><br/>
+              <small class="text-muted" am-time-ago="activity.updated_at"></small>
+              <span ng-show="activity.status">
+                <small class="text-muted" am-time-ago="activity.updated_at"></small> &dash; 
+                <small class="text-capitalize" ng-class="{'text-success': activity.status == 'succeeded', 'text-danger': activity.status == 'failed'}">{{activity.status}}</small> &dash; 
+                <small><a href="/apps/{{vm.$stateParams.app}}/builds/{{activity._id}}">View log</a></small>
+              </span>
             </td>
           </tr>
         </tbody>
