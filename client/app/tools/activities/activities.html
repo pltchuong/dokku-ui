@@ -10,11 +10,11 @@
       </fieldset>
       <table class="table table-striped">
         <tbody>
-          <tr ng-repeat="activity in vm.activities | filter:filterActivities | filter:{commands: '!git-upload-pack'}">
+          <tr ng-repeat="activity in vm.activities | filter:filterActivities | filter:{command: '!git-upload-pack'}">
             <td width="20%"><b>{{activity.user.firstName}} {{activity.user.lastName}}</b> <small>({{activity.user.username}})</small></td>
             <td>
               <code>{{activity.app.name}}</code>
-              <code>{{activity.commands[0]}}<span ng-show="activity.rev"> [{{activity.rev}}]</span></code><br/>
+              <code>{{activity.command}}<span ng-show="activity.rev"> [{{activity.rev}}]</span></code><br/>
               <small class="text-muted" am-time-ago="activity.updated_at"></small>
               <span ng-show="activity.status">
                 &dash;
