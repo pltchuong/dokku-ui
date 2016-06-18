@@ -17,10 +17,10 @@
           <tr ng-repeat="activity in vm.activities | filter:filterActivities">
             <td width="20%"><b>{{activity.user.firstName}} {{activity.user.lastName}}</b> <small>({{activity.user.username}})</small></td>
             <td>
-              <code>{{activity.command}}</code><br/>
+              <code>{{activity.commands[0]}}<span ng-show="activity.rev"> [{{activity.rev}}]</span></code><br/>
               <small class="text-muted" am-time-ago="activity.updated_at"></small>
               <span ng-show="activity.status">
-                <small class="text-muted" am-time-ago="activity.updated_at"></small> &dash; 
+                &dash;
                 <small class="text-capitalize" ng-class="{'text-success': activity.status == 'succeeded', 'text-danger': activity.status == 'failed'}">{{activity.status}}</small> &dash; 
                 <small><a href="/apps/{{vm.$stateParams.app}}/builds/{{activity._id}}">View log</a></small>
               </span>
