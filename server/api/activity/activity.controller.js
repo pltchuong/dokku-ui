@@ -66,7 +66,7 @@ export function index(req, res) {
   return Activity.find()
     .populate('user', 'username firstName lastName email')
     .populate('app', 'name')
-    .sort('-updated_at')
+    .sort('-created_at')
     .exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
