@@ -23,12 +23,4 @@ var AppSchema = new mongoose.Schema({
   updated_at: Date
 });
 
-AppSchema.pre('save', function (next) {
-  if (!this.created_at) {
-    this.created_at = Date.now();
-  }
-  this.updated_at = Date.now();
-  next();
-});
-
 export default mongoose.model('App', AppSchema);

@@ -1,11 +1,6 @@
 <section>
-  <div class="nav nav-tabs dokku-submenu">
-    <h4 class="text-primary">{{vm.$stateParams.app}}</h4>
-    <a class="sub-nav-item" href="/apps/{{vm.$stateParams.app}}"><i class="glyphicon glyphicon-dashboard"></i> &nbsp; Overview</a>
-    <a class="sub-nav-item active" href="/apps/{{vm.$stateParams.app}}/activities"><i class="glyphicon glyphicon-cloud-upload"></i> &nbsp; Activities</a>
-    <a class="sub-nav-item" href="/apps/{{vm.$stateParams.app}}/access"><i class="glyphicon glyphicon-user"></i> &nbsp; Access</a>
-    <a class="sub-nav-item" href="/apps/{{vm.$stateParams.app}}/settings"><i class="glyphicon glyphicon-cog"></i> &nbsp; Setting</a>
-  </div>
+
+  <subnav></subnav>
 
   <div class="row">
     <div class="col-md-12">
@@ -22,7 +17,7 @@
               <span ng-show="activity.status">
                 &dash;
                 <small class="text-capitalize" ng-class="{'text-success': activity.status == 'succeeded', 'text-danger': activity.status == 'failed'}">{{activity.status}}</small> &dash; 
-                <small><a href="/apps/{{vm.$stateParams.app}}/builds/{{activity._id}}">View log</a></small>
+                <small><a href="/apps/{{vm.$stateParams.app}}/activities/{{activity._id}}">View log</a></small>
               </span>
             </td>
           </tr>

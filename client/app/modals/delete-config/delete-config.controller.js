@@ -19,5 +19,7 @@ class ModalDeleteConfigController {
 
 }
 
-angular.module('dokkuUiApp')
-  .controller('ModalDeleteConfigController', ModalDeleteConfigController);
+angular
+  .module('dokkuUiApp')
+  .controller('ModalDeleteConfigController', ModalDeleteConfigController)
+;

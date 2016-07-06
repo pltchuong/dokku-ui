@@ -21,14 +21,13 @@
       "less": true,
       "uirouter": true,
       "bootstrap": true,
-      "uibootstrap": false,
+      "uibootstrap": true,
       "socketio": true,
+      "auth": true,
       "models": true,
       "mongooseModels": true,
       "mongoose": true,
       "grunt": true,
-      "jasmine": true,
-      "mocha": false,
       "should": false,
       "expect": false
     }
@@ -44,7 +43,6 @@
     "modulePrompt": true,
     "filters": [
       "uirouter",
-      "jasmine",
       "uirouter",
       "es6"
     ],

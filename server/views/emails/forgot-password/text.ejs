@@ -1,0 +1,8 @@
+Hi <%= user.firstName %> <%= user.lastName %>
+
+We received a request to reset your password for your Dokku UI account: <%= user.email %>.
+Simply click on the button to set a new password: http://localhost:9000/reset-password?token=<%= user.token %>
+If you didn't ask to change your password, don't worry! Your password is still safe and you can delete this email.
+
+Cheers,
+Dokku UI Team

@@ -1,142 +1,167 @@
-/**
- * Using Rails-like standard naming convention for endpoints.
- * GET     /api/apps              ->  index
- * POST    /api/apps              ->  create
- * GET     /api/apps/:id          ->  show
- * PUT     /api/apps/:id          ->  update
- * DELETE  /api/apps/:id          ->  destroy
- */
-
 'use strict';
 
 import _ from 'lodash';
+import Q from 'q';
 import App from './app.model';
 import Activity from '../activity/activity.model';
 
 function respondWithResult(res, statusCode) {
-  statusCode = statusCode || 200;
   return function(entity) {
     if (entity) {
-      res.status(statusCode).json(entity);
-      return entity;
+      res
+        .status(statusCode || 200)
+        .json(entity)
+      ;
+    }
+    return entity;
+  };
+}
+
+function handleParameters(req, res, parameters) {
+  return function() {
+    var requestParams = _.union(Object.keys(req.body), Object.keys(req.params));
+    if(!_.isEqual(requestParams.sort(), parameters.sort())) {
+      res
+        .status(400)
+        .end()
+      ;
     }
     return null;
-  };
-}
-
-function saveUpdates(updates) {
-  return function(entity) {
-    var updated = _.extend(entity, updates);
-    return updated.save()
-      .then(updated => {
-        return updated;
-      });
-  };
-}
-
-function removeEntity(res) {
-  return function(entity) {
-    if (entity) {
-      return entity.remove()
-        .then(() => {
-          res.status(204).end();
-        });
-    }
-  };
+  }
 }
 
 function handleEntityNotFound(res) {
   return function(entity) {
     if (!entity) {
-      res.status(404).end();
-      return null;
+      res
+        .status(404)
+        .end()
+      ;
     }
     return entity;
   };
 }
 
 function handleError(res, statusCode) {
-  statusCode = statusCode || 500;
   return function(err) {
-    res.status(statusCode).send(err);
+    res
+      .status(statusCode || 500)
+      .send(err)
+    ;
+    return null;
   };
 }
 
 function appIdOrName(appIdOrName) {
   return {
-    $or:[
-      {_id : appIdOrName},
-      {name: appIdOrName}
+    $or: [
+      {
+        _id: appIdOrName
+      },
+      {
+        name: appIdOrName
+      }
     ]
   };
 }
 
-// Gets a list of Apps
 export function index(req, res) {
-  return App.find()
-    .sort('name')
-    .populate('collaborators', 'username firstName lastName email')
-    .exec()
-    .then(respondWithResult(res))
-    .catch(handleError(res));
-}
-
-// Gets a single App from the DB
-export function show(req, res) {
-  return App.findOne(appIdOrName(req.params.id))
-    .populate('collaborators', 'username firstName lastName email')
-    .exec()
-    .then(handleEntityNotFound(res))
-    .then(respondWithResult(res))
-    .catch(handleError(res));
-}
-
-// Creates a new App in the DB
-export function create(req, res) {
-  return App.create(req.body)
-    .then(respondWithResult(res, 201))
-    .catch(handleError(res));
-}
-
-// Updates an existing App in the DB
-export function update(req, res) {
-  if (req.body._id) {
-    delete req.body._id;
-  }
-  return App.findOne(appIdOrName(req.params.id)).exec()
-    .then(handleEntityNotFound(res))
-    .then(saveUpdates(req.body))
-    .then(respondWithResult(res))
-    .catch(handleError(res));
-}
-
-// Deletes a App from the DB
-export function destroy(req, res) {
-  return App.findOne(appIdOrName(req.params.id)).exec()
-    .then(handleEntityNotFound(res))
-    .then(removeEntity(res))
-    .catch(handleError(res));
-}
-
-// Get App's activities
-export function activities(req, res) {
-  return App.findOne(appIdOrName(req.params.id)).exec()
-    .then(handleEntityNotFound(res))
-    .then(function(app) {
-      return Activity.find({app: app._id})
-        .populate('user', 'username firstName lastName email')
-        .populate('app', 'name')
-        .sort('-created_at')
+  return Q
+    .fcall(handleParameters(req, res, []))
+    .then(() => {
+      return App
+        .find()
+        .sort('name')
+        .populate('collaborators', 'username firstName lastName email')
         .exec()
-        .then(respondWithResult(res))
-        .catch(handleError(res));
-    });
+      ;
+    })
+    .then(respondWithResult(res))
+    .catch(handleError(res))
+  ;
 }
 
-// Updates App's config
-export function configs(req, res) {
-  return App.findOne(appIdOrName(req.params.id)).exec()
+export function show(req, res) {
+  return Q
+    .fcall(handleParameters(req, res, ['id']))
+    .then(() => {
+      return App
+      .findOne(appIdOrName(req.params.id))
+      .populate('collaborators', 'username firstName lastName email')
+      .exec()
+    })
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
-    .catch(handleError(res));
+    .catch(handleError(res))
+  ;
 }
+
+export function create() {
+  // ssh
+}
+
+export function update() {
+  // ssh
+}
+
+export function destroy() {
+  // ssh
+}
+
+export function configs() {
+  // ssh
+}
+
+export var activities = {
+
+  index(req, res) {
+    return Q
+      .fcall(handleParameters(req, res, ['id']))
+      .then(() => {
+        return App
+          .findOne(appIdOrName(req.params.id))
+          .exec()
+        ;
+      })
+      .then((app) => {
+        return Activity
+          .find({
+            app: app._id
+          })
+          .populate('user', 'username firstName lastName')
+          .populate('app', 'name')
+          .sort('-created_at')
+          .exec()
+        ;
+      })
+      .then(respondWithResult(res))
+      .catch(handleError(res))
+    ;
+  },
+
+  show(req, res) {
+    return Q
+      .fcall(handleParameters(req, res, ['id', 'activity']))
+      .then(() => {
+        return App
+          .findOne(appIdOrName(req.params.id))
+          .exec()
+        ;
+      })
+      .then((app) => {
+        return Activity
+          .findOne({
+            _id: req.params.activity,
+            app: app._id
+          })
+          .populate('user', 'username firstName lastName')
+          .populate('app', 'name')
+          .exec()
+        ;
+      })
+      .then(respondWithResult(res))
+      .catch(handleError(res))
+    ;
+  }
+
+};

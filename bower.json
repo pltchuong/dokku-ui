@@ -9,6 +9,8 @@
     "angular-resource": "~1.5.0",
     "angular-cookies": "~1.5.0",
     "angular-sanitize": "~1.5.0",
+    "angular-bootstrap": "~1.1.2",
+    "angular-validation-match": "~1.5.2",
     "font-awesome": ">=4.1.0",
     "lodash": "~2.4.1",
     "angular-socket-io": "~0.7.0",

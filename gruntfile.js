@@ -1,4 +1,4 @@
-// Generated on 2016-05-23 using generator-angular-fullstack 3.7.3
+// Generated on 2016-06-21 using generator-angular-fullstack 3.7.3
 'use strict';
 
 module.exports = function(grunt) {
@@ -15,9 +15,7 @@ module.exports = function(grunt) {
     useminPrepare: 'grunt-usemin',
     ngtemplates: 'grunt-angular-templates',
     cdnify: 'grunt-google-cdn',
-    protractor: 'grunt-protractor-runner',
     buildcontrol: 'grunt-build-control',
-    istanbul_check_coverage: 'grunt-mocha-istanbul',
     ngconstant: 'grunt-ng-constant'
   });
 
@@ -69,19 +67,15 @@ module.exports = function(grunt) {
           '<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).js',
           '!<%= yeoman.client %>/app/app.js'
         ],
-        tasks: ['injector:scripts']
+        tasks: ['injector:scripts', 'eslint']
       },
       injectCss: {
         files: ['<%= yeoman.client %>/{app,components}/**/*.css'],
         tasks: ['injector:css']
       },
-      mochaTest: {
-        files: ['<%= yeoman.server %>/**/*.{spec,integration}.js'],
-        tasks: ['env:test', 'mochaTest']
-      },
       jsTest: {
         files: ['<%= yeoman.client %>/{app,components}/**/*.{spec,mock}.js'],
-        tasks: ['newer:jshint:all', 'wiredep:test', 'karma']
+        tasks: ['newer:jshint:all', 'wiredep:test']
       },
       injectLess: {
         files: ['<%= yeoman.client %>/{app,components}/**/*.less'],
@@ -106,7 +100,7 @@ module.exports = function(grunt) {
       },
       express: {
         files: ['<%= yeoman.server %>/**/*.{js,json}'],
-        tasks: ['express:dev', 'wait'],
+        tasks: ['eslint', 'express:dev', 'wait'],
         options: {
           livereload: true,
           spawn: false //Without this option specified express won't be reloaded
@@ -130,30 +124,15 @@ module.exports = function(grunt) {
         },
         src: ['<%= yeoman.server %>/**/!(*.spec|*.integration).js']
       },
-      serverTest: {
-        options: {
-          jshintrc: '<%= yeoman.server %>/.jshintrc-spec'
-        },
-        src: ['<%= yeoman.server %>/**/*.{spec,integration}.js']
-      },
-      all: ['<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock|app.constant).js'],
-      test: {
-        src: ['<%= yeoman.client %>/{app,components}/**/*.{spec,mock}.js']
-      }
+      all: ['<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock|app.constant).js']
     },
 
-
-    jscs: {
-      options: {
-        config: ".jscsrc"
-      },
+    eslint: {
       main: {
-        files: {
-          src: [
-            '<%= yeoman.client %>/app/**/*.js',
-            '<%= yeoman.server %>/**/*.js'
-          ]
-        }
+        src: [
+          '<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock|app.constant).js',
+          '<%= yeoman.server %>/**/!(*.spec|*.integration).js'
+        ]
       }
     },
 
@@ -223,10 +202,11 @@ module.exports = function(grunt) {
       }
     },
 
-    // Automatically inject Bower components into the app and karma.conf.js
+    // Automatically inject Bower components into the app
     wiredep: {
       options: {
         exclude: [
+          /^bootstrap\.js$/,
           '/json3/',
           '/es5-shim/',
           /font-awesome\.css/,
@@ -236,10 +216,6 @@ module.exports = function(grunt) {
       client: {
         src: '<%= yeoman.client %>/index.html',
         ignorePath: '<%= yeoman.client %>/',
-      },
-      test: {
-        src: './karma.conf.js',
-        devDependencies: true
       }
     },
 
@@ -455,78 +431,6 @@ module.exports = function(grunt) {
       ]
     },
 
-    // Test settings
-    karma: {
-      unit: {
-        configFile: 'karma.conf.js',
-        singleRun: true
-      }
-    },
-
-    mochaTest: {
-      options: {
-        reporter: 'spec',
-        require: 'mocha.conf.js',
-        timeout: 5000 // set default mocha spec timeout
-      },
-      unit: {
-        src: ['<%= yeoman.server %>/**/*.spec.js']
-      },
-      integration: {
-        src: ['<%= yeoman.server %>/**/*.integration.js']
-      }
-    },
-
-    mocha_istanbul: {
-      unit: {
-        options: {
-          excludes: ['**/*.{spec,mock,integration}.js'],
-          reporter: 'spec',
-          require: ['mocha.conf.js'],
-          mask: '**/*.spec.js',
-          coverageFolder: 'coverage/server/unit'
-        },
-        src: '<%= yeoman.server %>'
-      },
-      integration: {
-        options: {
-          excludes: ['**/*.{spec,mock,integration}.js'],
-          reporter: 'spec',
-          require: ['mocha.conf.js'],
-          mask: '**/*.integration.js',
-          coverageFolder: 'coverage/server/integration'
-        },
-        src: '<%= yeoman.server %>'
-      }
-    },
-
-    istanbul_check_coverage: {
-      default: {
-        options: {
-          coverageFolder: 'coverage/**',
-          check: {
-            lines: 80,
-            statements: 80,
-            branches: 80,
-            functions: 80
-          }
-        }
-      }
-    },
-
-    protractor: {
-      options: {
-        configFile: 'protractor.conf.js'
-      },
-      chrome: {
-        options: {
-          args: {
-            browser: 'chrome'
-          }
-        }
-      }
-    },
-
     env: {
       test: {
         NODE_ENV: 'test'
@@ -689,6 +593,7 @@ module.exports = function(grunt) {
     }
 
     grunt.task.run([
+      'eslint',
       'clean:server',
       'env:all',
       'concurrent:pre',
@@ -713,8 +618,6 @@ module.exports = function(grunt) {
       return grunt.task.run([
         'env:all',
         'env:test',
-        'mochaTest:unit',
-        'mochaTest:integration'
       ]);
     } else if(target === 'client') {
       return grunt.task.run([
@@ -724,8 +627,7 @@ module.exports = function(grunt) {
         'concurrent:test',
         'injector',
         'postcss',
-        'wiredep:test',
-        'karma'
+        'wiredep:test'
       ]);
     } else if(target === 'e2e') {
       if(option === 'prod') {
@@ -733,8 +635,7 @@ module.exports = function(grunt) {
           'build',
           'env:all',
           'env:prod',
-          'express:prod',
-          'protractor'
+          'express:prod'
         ]);
       } else {
         return grunt.task.run([
@@ -746,33 +647,27 @@ module.exports = function(grunt) {
           'injector',
           'wiredep:client',
           'postcss',
-          'express:dev',
-          'protractor'
+          'express:dev'
         ]);
       }
     } else if(target === 'coverage') {
       if(option === 'unit') {
         return grunt.task.run([
           'env:all',
-          'env:test',
-          'mocha_istanbul:unit'
+          'env:test'
         ]);
       } else if(option === 'integration') {
         return grunt.task.run([
           'env:all',
-          'env:test',
-          'mocha_istanbul:integration'
+          'env:test'
         ]);
       } else if(option === 'check') {
         return grunt.task.run([
-          'istanbul_check_coverage'
         ]);
       } else {
         return grunt.task.run([
           'env:all',
-          'env:test',
-          'mocha_istanbul',
-          'istanbul_check_coverage'
+          'env:test'
         ]);
       }
     } else {

@@ -1,0 +1,10 @@
+<div class="nav nav-tabs dokku-submenu">
+  <span ng-show="subnav.$stateParams.app">
+    <h4 class="text-primary">{{subnav.$stateParams.app}}</h4>
+    <a class="sub-nav-item" ng-class="{active: subnav.$state.current.name == 'apps.overview'}" href="/apps/{{subnav.$stateParams.app}}"><i class="glyphicon glyphicon-dashboard"></i> &nbsp; Overview</a>
+    <a class="sub-nav-item" ng-class="{active: subnav.$state.current.name == 'apps.activities'}" href="/apps/{{subnav.$stateParams.app}}/activities"><i class="glyphicon glyphicon-cloud-upload"></i> &nbsp; Activities</a>
+    <a class="sub-nav-item" ng-class="{active: subnav.$state.current.name == 'apps.access'}" href="/apps/{{subnav.$stateParams.app}}/access"><i class="glyphicon glyphicon-user"></i> &nbsp; Access</a>
+    <a class="sub-nav-item" ng-class="{active: subnav.$state.current.name == 'apps.settings'}" href="/apps/{{subnav.$stateParams.app}}/settings"><i class="glyphicon glyphicon-cog"></i> &nbsp; Setting</a>
+  </span>
+  <a class="sub-nav-item" href="javascript: void(0);" ng-click="subnav.logout()"><i class="glyphicon glyphicon-log-out"></i> &nbsp; Logout</a>
+</div>

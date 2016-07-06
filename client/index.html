@@ -22,20 +22,13 @@
       <!-- endinjector -->
     <!-- endbuild -->
   </head>
-  <body ng-app="dokkuUiApp">
+  <body ng-app="dokkuUiApp" ng-class="state">
     <!--[if lt IE 7]>
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <navbar></navbar>
-    <section class="content">
-      <section class="container">
-        <div ui-view=""></div>
-      </section>
-    </section>
-    <footer></footer>
-    <div class="loading"></div>
+    <div ui-view=""></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
@@ -60,6 +53,8 @@
       <script src="bower_components/angular-resource/angular-resource.js"></script>
       <script src="bower_components/angular-cookies/angular-cookies.js"></script>
       <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+      <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+      <script src="bower_components/angular-validation-match/dist/angular-validation-match.min.js"></script>
       <script src="bower_components/lodash/dist/lodash.compat.js"></script>
       <script src="bower_components/angular-socket-io/socket.js"></script>
       <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
@@ -76,26 +71,38 @@
     <!-- build:js(.tmp) app/app.js -->
       <script src="app/app.js"></script>
       <!-- injector:js -->
+      <script src="components/auth/auth.module.js"></script>
       <script src="components/util/util.module.js"></script>
-      <script src="app/modals/delete-config/delete-config.controller.js"></script>
+      <script src="app/modals/edit-config/edit-config.controller.js"></script>
+      <script src="app/account/reset-password/reset-password.controller.js"></script>
+      <script src="app/account/signup/signup.controller.js"></script>
+      <script src="app/app.constant.js"></script>
+      <script src="app/apps/access/access.controller.js"></script>
       <script src="app/apps/activities/activities.controller.js"></script>
+      <script src="app/apps/activities/activity.controller.js"></script>
       <script src="app/apps/apps.js"></script>
-      <script src="app/apps/builds/builds.controller.js"></script>
       <script src="app/apps/overview/overview.controller.js"></script>
       <script src="app/apps/settings/settings.controller.js"></script>
-      <script src="app/main/main.controller.js"></script>
-      <script src="app/main/main.js"></script>
-      <script src="app/modals/create-app/create-app.client.controller.js"></script>
-      <script src="app/apps/access/access.controller.js"></script>
+      <script src="app/errors/errors.js"></script>
+      <script src="app/modals/create-app/create-app.controller.js"></script>
+      <script src="app/modals/delete-config/delete-config.controller.js"></script>
       <script src="app/modals/edit-collaborators/edit-collaborators.controller.js"></script>
-      <script src="app/modals/edit-config/edit-config.controller.js"></script>
+      <script src="app/account/forgot-password/forgot-password.controller.js"></script>
       <script src="app/tools/activities/activities.controller.js"></script>
       <script src="app/tools/tools.js"></script>
+      <script src="app/account/account.js"></script>
+      <script src="components/auth/auth.service.js"></script>
+      <script src="components/auth/interceptor.service.js"></script>
+      <script src="components/auth/router.decorator.js"></script>
+      <script src="components/auth/user.service.js"></script>
       <script src="components/footer/footer.directive.js"></script>
+      <script src="components/mongoose-error/mongoose-error.directive.js"></script>
       <script src="components/navbar/navbar.controller.js"></script>
       <script src="components/navbar/navbar.directive.js"></script>
       <script src="components/socket/socket.service.js"></script>
-      <script src="app/app.constant.js"></script>
+      <script src="components/subnav/subnav.controller.js"></script>
+      <script src="components/subnav/subnav.directive.js"></script>
+      <script src="app/account/login/login.controller.js"></script>
       <script src="components/util/util.service.js"></script>
       <!-- endinjector -->
     <!-- endbuild -->

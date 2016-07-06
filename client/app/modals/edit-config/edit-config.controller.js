@@ -19,5 +19,7 @@ class ModalEditConfigController {
 
 }
 
-angular.module('dokkuUiApp')
-  .controller('ModalEditConfigController', ModalEditConfigController);
+angular
+  .module('dokkuUiApp')
+  .controller('ModalEditConfigController', ModalEditConfigController)
+;

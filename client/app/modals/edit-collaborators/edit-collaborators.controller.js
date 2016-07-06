@@ -8,15 +8,17 @@ class ModalEditCollaboratorsController {
     this.inputs = {
       collaborators: collaborators
     };
-
     this.fetch();
   }
 
   fetch() {
-    this.$http.get('/api/users').then(response => {
-      this.inputs.users = response.data;
-    });
-  };
+    this.$http
+      .get('/api/users')
+      .then((response) => {
+        this.inputs.users = response.data;
+      })
+    ;
+  }
 
   close() {
     this.exit({
@@ -26,5 +28,7 @@ class ModalEditCollaboratorsController {
 
 }
 
-angular.module('dokkuUiApp')
-  .controller('ModalEditCollaboratorsController', ModalEditCollaboratorsController);
+angular
+  .module('dokkuUiApp')
+  .controller('ModalEditCollaboratorsController', ModalEditCollaboratorsController)
+;

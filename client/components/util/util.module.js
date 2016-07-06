@@ -1,3 +1,5 @@
 'use strict';
 
-angular.module('dokkuUiApp.util', []);
+angular
+  .module('dokkuUiApp.util', [])
+;

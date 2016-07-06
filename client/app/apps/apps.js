@@ -1,70 +1,55 @@
 'use strict';
 
-angular.module('dokkuUiApp')
-  .config(function ($stateProvider, $httpProvider) {
+angular
+  .module('dokkuUiApp')
+  .config(($stateProvider) => {
     $stateProvider
-      .state('app-overview', {
+      .state('apps', {
+        url: '',
+        templateUrl: 'app/apps/apps.html',
+        abstract: true,
+        authenticate: true
+      })
+      .state('apps.index', {
+        url: '/apps',
+        templateUrl: 'app/apps/index.html',
+        authenticate: true
+      })
+      .state('apps.overview', {
         url: '/apps/:app',
         templateUrl: 'app/apps/overview/overview.html',
         controller: 'OverviewController',
-        controllerAs: 'vm'
+        controllerAs: 'vm',
+        authenticate: true
       })
-      .state('app-activities', {
+      .state('apps.activities', {
         url: '/apps/:app/activities',
         templateUrl: 'app/apps/activities/activities.html',
         controller: 'ActivitiesController',
-        controllerAs: 'vm'
+        controllerAs: 'vm',
+        authenticate: true
       })
-      .state('app-access', {
+      .state('apps.activity', {
+        url: '/apps/:app/activities/:activity',
+        templateUrl: 'app/apps/activities/activity.html',
+        controller: 'ActivityController',
+        controllerAs: 'vm',
+        authenticate: true
+      })
+      .state('apps.access', {
         url: '/apps/:app/access',
         templateUrl: 'app/apps/access/access.html',
         controller: 'AccessController',
-        controllerAs: 'vm'
+        controllerAs: 'vm',
+        authenticate: true
       })
-      .state('app-settings', {
+      .state('apps.settings', {
         url: '/apps/:app/settings',
         templateUrl: 'app/apps/settings/settings.html',
         controller: 'SettingsController',
-        controllerAs: 'vm'
-      })
-      .state('app-builds', {
-        url: '/apps/:app/builds/:build',
-        templateUrl: 'app/apps/builds/builds.html',
-        controller: 'BuildsController',
-        controllerAs: 'vm'
-      })
-
-      .state('404', {
-        url: '/404',
-        templateUrl: 'app/apps/errors/404.html'
+        controllerAs: 'vm',
+        authenticate: true
       })
     ;
-
-    $httpProvider.interceptors.push(function($q) {
-      return {
-        request: function (config) {
-          if(!config.silence) {
-            jQuery('.loading').stop().fadeIn();
-          }
-          return config;
-        },
-        requestError: function(rejection) {
-          jQuery('.loading').stop().fadeOut();
-          return $q.reject(rejection);
-        },
-        response: function(response) {
-          jQuery('.loading').stop().fadeOut();
-          return response;
-        },
-        responseError: function(rejection) {
-          jQuery('.loading').stop().fadeOut();
-          return $q.reject(rejection);
-        }
-      };
-    });
   })
-  .run(['$rootScope', '$state', '$stateParams',
-    function ($rootScope, $state, $stateParams) {
-      $rootScope.$stateParams = $stateParams;
-  }])
 ;

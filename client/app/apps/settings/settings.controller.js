@@ -10,16 +10,20 @@ class SettingsController {
   }
 
   fetch() {
-    if(this.$stateParams.app) {
-      this.$http.get('/api/apps/' + this.$stateParams.app).then(response => {
-        this.app = response.data;
-      });
+    if (this.$stateParams.app) {
+      this.$http
+        .get('/api/apps/' + this.$stateParams.app)
+        .then((response) => {
+          this.app = response.data;
+        })
+      ;
     } else {
       this.$location.path('/apps');
     }
   }
-  
 }
 
-angular.module('dokkuUiApp')
-  .controller('SettingsController', SettingsController);
+angular
+  .module('dokkuUiApp')
+  .controller('SettingsController', SettingsController)
+;

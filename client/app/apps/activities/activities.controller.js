@@ -10,15 +10,20 @@ class ActivitiesController {
   }
 
   fetch() {
-    if(this.$stateParams.app) {
-      this.$http.get('/api/apps/' + this.$stateParams.app + '/activities').then(response => {
-        this.activities = response.data;
-      });
+    if (this.$stateParams.app) {
+      this.$http
+        .get('/api/apps/' + this.$stateParams.app + '/activities')
+        .then((response) => {
+          this.activities = response.data;
+        })
+      ;
     } else {
       this.$location.path('/apps');
     }
   }
 }
 
-angular.module('dokkuUiApp')
-  .controller('ActivitiesController', ActivitiesController);
+angular
+  .module('dokkuUiApp')
+  .controller('ActivitiesController', ActivitiesController)
+;

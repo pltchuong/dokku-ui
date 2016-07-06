@@ -3,13 +3,6 @@
 var path = require('path');
 var _ = require('lodash');
 
-function requiredProcessEnv(name) {
-  if (!process.env[name]) {
-    throw new Error('You must set the ' + name + ' environment variable');
-  }
-  return process.env[name];
-}
-
 // All configurations will extend these options
 // ============================================
 var all = {
@@ -39,6 +32,17 @@ var all = {
         safe: true
       }
     }
+  },
+
+  email: {
+    smtp: {
+      user: 'dokku@imphan.com',
+      password: 'PzOAXgUuox13',
+      host: 'smtp.mailgun.org',
+      tls: 465
+    },
+    from: 'Phan Chuong <pltchuong@gmail.com>',
+    templateDir: __dirname + '/../../views/emails'
   }
 };
 

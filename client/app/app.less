@@ -16,21 +16,12 @@
  * App-wide Styles
  */
 
-body {
-  padding: 50px 0 0 0;
-
-  @media (min-width: @screen-md-min) {
-    padding: 0 0 0 300px;
-  }
+html {
+  min-height: 100%;
 }
 
-.btn {
-  font-weight: bold;
-}
-
-.logo {
-  display: inline-block !important;
-  margin-right: 10px;
+.container {
+  max-width: 100%;
 }
 
 .navmenu {
@@ -41,194 +32,43 @@ body {
   }
 }
 
-.navbar {
-  text-align: center;
+.navmenu-brand {
+  padding: 20px 15px 20px 145px;
+  font-family: 'Lora';
+  font-size: 35px;
+  letter-spacing: 5px;
+  color: #000 !important;
+  background: #fff !important;
+  margin: 0;
 
-  @media (min-width: @screen-md-min) {
-    display: none !important; /* IE8 fix */
-  }
-
-  .navbar-brand {
-    display: inline-block;
-    float: none;
-  }
-
-  .navbar-toggle {
+  .logo {
     position: absolute;
-    float: left;
-    margin-left: 15px;
-
-    @media (min-width: 1px) {
-      display: block !important;
-    }
+    top: -20px;
+    left: -30px;
+    width: 150px;
+    z-index: 10;
   }
 }
 
-.container {
-  max-width: 100%;
-}
-
-.dokku-menu {
-  background: @brand-primary;
-  border: none;
-
-  .navmenu-brand {
-    padding: 20px 15px 20px 145px;
-    font-family: 'Lora';
-    font-size: 35px;
-    letter-spacing: 5px;
-    color: #000 !important;
-    background: #fff !important;
-    margin: 0;
-
-    .logo {
-      position: absolute;
-      top: -20px;
-      left: -30px;
-      width: 150px;
-      z-index: 10;
-    }
-  }
-
-  .nav.navmenu-nav {
-
-    li {
-      &:first-child {
-        padding: 15px;
-      }
-
-      &.active {
-        a {
-          background: #fff;
-          color: @brand-primary;
-        }
-      }
-
-      a {
-        color: #fff;
-        font-size: 16px;
-      }
-    }
-  }
-}
-
-.dokku-submenu {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  padding-bottom: 9px;
-  border-bottom: 1px @hr-border solid;
-  text-align: center;
-  line-height: 30px;
+.wave {
   position: relative;
 
-  h4 {
-    font-weight: bold;
-
-    @media (min-width: @screen-md-min) {
-      position: absolute;
-      top: -10px;
-      left: 0;
-    }
-  }
-
-  .sub-nav-item {
-    display: inline-block;
-    margin-left: 7px;
-    margin-right: 7px;
-    color: #7D7D8E;
-    position: relative;
-    outline: none;
-    text-decoration: none;
-
-    &:first-child {
-      margin-left: 0;
-    }
-
-    &:last-child {
-      margin-right: 0;
-    }
-
-    &:after {
-      content: ' ';
-      display: block;
-      height: 1px;
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -10px;
-    }
-
-    &:hover {
-      text-decoration: none;
-      color: @brand-primary;
-
-      &:after {
-        background: @brand-primary;
-      }
-    }
-
-    &.active {
-      color: @brand-primary;
-
-      &:after {
-        background: @brand-primary;
-      }
-    }
-
-    i {
-      font-size: 20px;
-      top: 5px;
-    }
-  }
-}
-
-.dokku-list-fields {
-  margin-bottom: 0;
-
-  li:last-child .form-group {
-    margin-bottom: 0;
-  }
-
-  .form-control {
-    @media (max-width: @screen-xs-max) {
-      margin-bottom: 5px;
-    }
-  }
-
-  .btn-group {
+  &:before {
+    content: " ";
+    position: absolute;
+    top: -10px;
+    left: 0;
+    right: 0;
     width: 100%;
-
-    .btn {
-      padding-left: 0;
-      padding-right: 0;
-      width: 50%;
-    }
+    height: 10px;
+    background-image: radial-gradient(circle at 10px -5px, transparent 12px, #2a8fbd 13px);
+    background-repeat: repeat;
+    background-size: 20px 20px;
   }
 }
 
-.dokku-info {
-
-  h1 {
-    margin: 0;
-    font-weight: 600;
-  }
-
-  dd {
-    margin-bottom: 12px;
-    word-break: break-all;
-  }
-}
-
-footer {
-  font-size: 12px;
-  border-top: 1px @hr-border solid;
-  margin-top: 20px;
-  text-align: center;
-  padding: 10px 0;
-
-  p {
-    margin: 0;
-  }
+.btn {
+  font-weight: bold;
 }
 
 .ui-select-match-item {
@@ -253,4 +93,8 @@ footer {
 }
 
 /* inject:less */
+@import 'account/account.less';
+@import 'account/login/login.less';
+@import 'account/reset-password/reset-password.less';
+@import 'apps/apps.less';
 /* endinject */
