@@ -2,8 +2,13 @@
 
 import _ from 'lodash';
 import Q from 'q';
+import path from 'path';
+import email from 'emailjs';
+import emailtemplates from 'email-templates';
+import config from '../../config/environment';
 import App from './app.model';
 import Activity from '../activity/activity.model';
+import User from '../user/user.model';
 
 function respondWithResult(res, statusCode) {
   return function(entity) {
@@ -17,17 +22,35 @@ function respondWithResult(res, statusCode) {
   };
 }
 
+function saveUpdates(updates) {
+  return function(entity) {
+    if (entity) {
+      sendEmail(_.difference(entity.collaborators, updates.collaborators), 'collaborator-removed', entity);
+      sendEmail(_.difference(updates.collaborators, entity.collaborators), 'collaborator-added', entity);
+
+      var updated = _.extend(entity, updates);
+      return updated
+        .save()
+        .then((updated) => {
+          return updated;
+        })
+      ;
+    }
+    return entity;
+  };
+}
+
 function handleParameters(req, res, parameters) {
   return function() {
     var requestParams = _.union(Object.keys(req.body), Object.keys(req.params));
-    if(!_.isEqual(requestParams.sort(), parameters.sort())) {
+    if(_.difference(parameters.sort(), requestParams.sort()).length > 0) {
       res
         .status(400)
         .end()
       ;
     }
     return null;
-  }
+  };
 }
 
 function handleEntityNotFound(res) {
@@ -65,6 +88,49 @@ function appIdOrName(appIdOrName) {
   };
 }
 
+function sendEmail(recipients, template, app) {
+  if(recipients.length > 0) {
+    return Q
+      .fcall(() => {
+        return User
+          .find({
+            _id: {
+              $in: recipients
+            }
+          }, 'firstName lastName email')
+          .exec()
+        ;
+      })
+      .then((users) => {
+        var server = email.server.connect(config.email.smtp);
+
+        users.forEach((user) => {
+          new emailtemplates.EmailTemplate(path.join(config.email.templateDir, template))
+            .render({
+              user: user,
+              app: app
+            })
+            .then((response) => {
+              server.send({
+                text: response.text,
+                from: config.email.from,
+                to: user.email,
+                subject: response.subject,
+                attachment: [
+                  {
+                    data: response.html,
+                    alternative: true
+                  }
+                ]
+              });
+            })
+          ;
+        });
+      })
+    ;
+  }
+}
+
 export function index(req, res) {
   return Q
     .fcall(handleParameters(req, res, []))
@@ -86,9 +152,10 @@ export function show(req, res) {
     .fcall(handleParameters(req, res, ['id']))
     .then(() => {
       return App
-      .findOne(appIdOrName(req.params.id))
-      .populate('collaborators', 'username firstName lastName email')
-      .exec()
+        .findOne(appIdOrName(req.params.id))
+        .populate('collaborators', 'username firstName lastName email')
+        .exec()
+      ;
     })
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
@@ -100,9 +167,25 @@ export function create() {
   // ssh
 }
 
-export function update() {
-  // ssh
+export function update(req, res) {
+  if (req.body._id) {
+    delete req.body._id;
+  }
+  return Q
+    .fcall(handleParameters(req, res, ['id']))
+    .then(() => {
+      return App
+        .findOne(appIdOrName(req.params.id))
+        .exec()
+      ;
+    })
+    .then(handleEntityNotFound(res))
+    .then(saveUpdates(req.body))
+    .then(respondWithResult(res))
+    .catch(handleError(res))
+  ;
 }
+
 
 export function destroy() {
   // ssh

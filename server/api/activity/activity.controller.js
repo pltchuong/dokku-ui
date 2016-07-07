@@ -19,14 +19,14 @@ function respondWithResult(res, statusCode) {
 function handleParameters(req, res, parameters) {
   return function() {
     var requestParams = _.union(Object.keys(req.body), Object.keys(req.params));
-    if(!_.isEqual(requestParams.sort(), parameters.sort())) {
+    if(_.difference(parameters.sort(), requestParams.sort()).length > 0) {
       res
         .status(400)
         .end()
       ;
     }
     return null;
-  }
+  };
 }
 
 function handleError(res, statusCode) {

@@ -2,8 +2,8 @@
 
 import _ from 'lodash';
 import Q from 'q';
-import path from 'path';
 import uuid from 'node-uuid';
+import path from 'path';
 import email from 'emailjs';
 import emailtemplates from 'email-templates';
 import config from '../../config/environment';
@@ -69,14 +69,14 @@ function removeEntity(res) {
 function handleParameters(req, res, parameters) {
   return function() {
     var requestParams = _.union(Object.keys(req.body), Object.keys(req.params));
-    if(!_.isEqual(requestParams.sort(), parameters.sort())) {
+    if(_.difference(parameters.sort(), requestParams.sort()).length > 0) {
       res
         .status(400)
         .end()
       ;
     }
     return null;
-  }
+  };
 }
 
 function handleEntityNotFound(res) {
@@ -115,18 +115,28 @@ function userIdOrUsername(userIdOrUsername) {
 }
 
 export function index(req, res) {
-  return User
-    .find({}, '-salt -password -token')
-    .exec()
+  return Q
+    .fcall(handleParameters(req, res, []))
+    .then(() => {
+      return User
+        .find({}, '-salt -password -token')
+        .exec()
+      ;
+    })
     .then(respondWithResult(res))
     .catch(handleError(res))
   ;
 }
 
 export function show(req, res) {
-  return User
-    .findOne(userIdOrUsername(req.params.id), '-salt -password -token')
-    .exec()
+  return Q
+    .fcall(handleParameters(req, res, ['id']))
+    .then(() => {
+      return User
+        .findOne(userIdOrUsername(req.params.id), '-salt -password -token')
+        .exec()
+      ;
+    })
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res))
@@ -134,8 +144,11 @@ export function show(req, res) {
 }
 
 export function create(req, res) {
-  return User
-    .create(req.body)
+  return Q
+    .fcall(handleParameters(req, res, []))
+    .then(() => {
+      return User.create(req.body);
+    })
     .then(respondWithResult(res, 201))
     .catch(handleError(res))
   ;
@@ -145,9 +158,14 @@ export function update(req, res) {
   if (req.body._id) {
     delete req.body._id;
   }
-  return User
-    .findOne(userIdOrUsername(req.params.id), '-salt -password -token')
-    .exec()
+  return Q
+    .fcall(handleParameters(req, res, ['id']))
+    .then(() => {
+      return User
+        .findOne(userIdOrUsername(req.params.id), '-salt -password -token')
+        .exec()
+      ;
+    })
     .then(handleEntityNotFound(res))
     .then(saveUpdates(req.body))
     .then(respondWithResult(res))
@@ -156,9 +174,14 @@ export function update(req, res) {
 }
 
 export function destroy(req, res) {
-  return User
-    .findOne(userIdOrUsername(req.params.id), '-salt -password -token')
-    .exec()
+  return Q
+    .fcall(handleParameters(req, res, ['id']))
+    .then(() => {
+      return User
+        .findOne(userIdOrUsername(req.params.id), '-salt -password -token')
+        .exec()
+      ;
+    })
     .then(handleEntityNotFound(res))
     .then(removeEntity(res))
     .catch(handleError(res))
@@ -166,11 +189,16 @@ export function destroy(req, res) {
 }
 
 export function me(req, res) {
-  return User
-    .findOne({
-      _id: req.user._id
-    }, '-salt -password -token')
-    .exec()
+  return Q
+    .fcall(handleParameters(req, res, []))
+    .then(() => {
+      return User
+        .findOne({
+          _id: req.user._id
+        }, '-salt -password -token')
+        .exec()
+      ;
+    })
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res))
@@ -179,7 +207,7 @@ export function me(req, res) {
 
 export var password = {
 
-  request: function(req, res) {
+  request(req, res) {
     return Q
       .fcall(handleParameters(req, res, ['email']))
       .then(() => {
@@ -225,7 +253,7 @@ export var password = {
     ;
   },
 
-  reset: function(req, res) {
+  reset(req, res) {
     return Q
       .fcall(handleParameters(req, res, ['token', 'password']))
       .then(() => {

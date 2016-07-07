@@ -198,7 +198,7 @@
     require-jsdoc: "off",
     require-yield: "error",
     rest-spread-spacing: "off",
-    semi: "off",
+    semi: ["error", "always"],
     semi-spacing: "off",
     sort-imports: "off",
     sort-vars: "off",

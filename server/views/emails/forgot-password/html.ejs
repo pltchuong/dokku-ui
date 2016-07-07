@@ -2,10 +2,12 @@
   <body>
     <div class="wrapper">
       <h1>Hi <%= user.firstName %> <%= user.lastName %></h1>
+      <p>&nbsp;</p>
       <p>We received a request to reset your password for your Dokku UI account: <%= user.email %>.</p>
       <p>Simply click on the button to set a new password:</p>
       <p><a class="btn" href="http://localhost:9000/reset-password?token=<%= user.token %>">Set a New Password</a></p>
       <p>If you didn't ask to change your password, don't worry! Your password is still safe and you can delete this email.</p>
+      <p>&nbsp;</p>
       <p>Cheers,</p>
       <p>Dokku UI Team</p>
     </div>
