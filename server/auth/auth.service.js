@@ -1,10 +1,10 @@
 'use strict';
 
-import config from '../config/environment';
-import jwt from 'jsonwebtoken';
-import expressJwt from 'express-jwt';
-import compose from 'composable-middleware';
 import User from '../api/user/user.model';
+import compose from 'composable-middleware';
+import config from '../config/environment';
+import expressJwt from 'express-jwt';
+import jwt from 'jsonwebtoken';
 
 var validateJwt = expressJwt({
   secret: config.secrets.session
@@ -55,7 +55,8 @@ export function hasRole(roleRequired) {
           .send('Forbidden')
         ;
       }
-    });
+    })
+  ;
 }
 
 export function signToken(id, role) {

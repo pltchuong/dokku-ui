@@ -1,13 +1,13 @@
 'use strict';
 
-import _ from 'lodash';
 import Q from 'q';
-import path from 'path';
+import User from './user.model';
+import _ from 'lodash';
+import config from '../../config/environment';
 import email from 'emailjs';
 import emailtemplates from 'email-templates';
-import config from '../../config/environment';
+import path from 'path';
 import uuid from 'node-uuid';
-import User from './user.model';
 
 function respondWithResult(res, statusCode) {
   return function(entity) {

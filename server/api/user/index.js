@@ -1,8 +1,8 @@
 'use strict';
 
-var express = require('express');
-var controller = require('./user.controller');
-var auth = require('../../auth/auth.service');
+import * as auth from '../../auth/auth.service';
+import * as controller from './user.controller';
+import express from 'express';
 
 var router = express.Router();
 
@@ -18,4 +18,4 @@ router.put('/:id', auth.isAuthenticated(), controller.update);
 router.patch('/:id', auth.isAuthenticated(), controller.update);
 router.delete('/:id', auth.isAuthenticated(), controller.destroy);
 
-module.exports = router;
+export default router;

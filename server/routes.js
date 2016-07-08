@@ -1,14 +1,18 @@
 'use strict';
 
+import api_activity from './api/activity';
+import api_app from './api/app';
+import api_auth from './auth';
+import api_user from './api/user';
 import errors from './components/errors';
 import path from 'path';
 
 export default function(app) {
   // Insert routes below
-  app.use('/api/activities', require('./api/activity'));
-  app.use('/api/users', require('./api/user'));
-  app.use('/api/apps', require('./api/app'));
-  app.use('/auth', require('./auth').default);
+  app.use('/api/activities', api_activity);
+  app.use('/api/users', api_user);
+  app.use('/api/apps', api_app);
+  app.use('/auth', api_auth);
   // All undefined asset or api routes should return a 404
   app
     .route('/:url(api|auth|components|app|bower_components|assets)/*')

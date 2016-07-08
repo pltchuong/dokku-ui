@@ -1,15 +1,15 @@
 'use strict';
 
-import _ from 'lodash';
+import Activity from '../activity/activity.model';
+import App from './app.model';
 import Q from 'q';
-import path from 'path';
+import SSH from 'ssh-promise';
+import User from '../user/user.model';
+import _ from 'lodash';
+import config from '../../config/environment';
 import email from 'emailjs';
 import emailtemplates from 'email-templates';
-import config from '../../config/environment';
-import SSH from 'ssh-promise';
-import App from './app.model';
-import Activity from '../activity/activity.model';
-import User from '../user/user.model';
+import path from 'path';
 
 function respondWithResult(res, statusCode) {
   return function(entity) {

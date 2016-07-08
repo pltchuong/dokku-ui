@@ -200,7 +200,7 @@
     rest-spread-spacing: "off",
     semi: ["error", "always"],
     semi-spacing: "off",
-    sort-imports: "off",
+    sort-imports: "error",
     sort-vars: "off",
     space-before-blocks: "off",
     space-before-function-paren: "off",

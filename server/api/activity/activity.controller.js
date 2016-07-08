@@ -1,8 +1,8 @@
 'use strict';
 
-import _ from 'lodash';
-import Q from 'q';
 import Activity from './activity.model';
+import Q from 'q';
+import _ from 'lodash';
 
 function respondWithResult(res, statusCode) {
   return function(entity) {

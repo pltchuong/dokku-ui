@@ -1,40 +1,43 @@
-import passport from 'passport';
-import { Strategy as LocalStrategy } from 'passport-local';
+'use strict';
 
-function localAuthenticate(User, email, password, done) {
-  User
-    .findOne({
-      email: email.toLowerCase()
-    })
-    .exec()
-    .then((user) => {
-      if (!user) {
-        return done(null, false, {
-          message: 'This email is not registered.'
-        });
-      }
-      user.authenticate(password, (authError, authenticated) => {
-        if (authError) {
-          return done(authError);
-        }
-        if (!authenticated) {
-          return done(null, false, {
-            message: 'This password is not correct.'
-          });
-        } else {
-          return done(null, user);
-        }
-      });
-    })
-    .catch((err) => done(err))
-  ;
-}
+import Passport from 'passport';
+import Strategy from 'passport-local';
+import User from '../../api/user/user.model';
 
-export function setup(User) {
-  passport.use(new LocalStrategy({
+export default function() {
+  Passport.use(new Strategy({
     usernameField: 'email',
     passwordField: 'password'
   }, (email, password, done) => {
-    return localAuthenticate(User, email, password, done);
+    return User
+      .findOne({
+        email: email.toLowerCase()
+      })
+      .exec()
+      .then((user) => {
+        if (user) {
+          user.authenticate(password, (authError, authenticated) => {
+            if (authError) {
+              done(authError);
+            }
+            if (authenticated) {
+              done(null, user);
+            } else {
+              done(null, false, {
+                data: 'This password is not correct.'
+              });
+            }
+          });
+        } else {
+          done(null, false, {
+            data: 'This email is not registered.'
+          });
+        }
+        return user;
+      })
+      .catch((err) => {
+        done(err);
+      })
+    ;
   }));
 }

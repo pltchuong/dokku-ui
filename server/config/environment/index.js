@@ -1,8 +1,8 @@
 'use strict';
 
-var path = require('path');
-var _ = require('lodash');
-var fs = require('fs');
+import _ from 'lodash';
+import fs from 'fs';
+import path from 'path';
 
 // All configurations will extend these options
 // ============================================
@@ -58,7 +58,4 @@ var all = {
 
 // Export the config object based on the NODE_ENV
 // ==============================================
-module.exports = _.merge(
-  all,
-  require('./shared'),
-  require(`./${process.env.NODE_ENV}.js`) || {});
+module.exports = _.merge(all, require('./shared'), require(`./${process.env.NODE_ENV}.js`) || {});

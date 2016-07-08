@@ -1,27 +1,30 @@
 'use strict';
 
+import bodyParser from 'body-parser';
+import compression from 'compression';
+import config from './environment';
+import connectMongo from 'connect-mongo';
+import cookieParser from 'cookie-parser';
+import ejs from 'ejs';
+import errorHandler from 'errorhandler';
 import express from 'express';
 import favicon from 'serve-favicon';
-import morgan from 'morgan';
-import compression from 'compression';
-import bodyParser from 'body-parser';
-import methodOverride from 'method-override';
-import cookieParser from 'cookie-parser';
-import errorHandler from 'errorhandler';
-import path from 'path';
+import livereload from 'connect-livereload';
 import lusca from 'lusca';
-import config from './environment';
-import passport from 'passport';
-import session from 'express-session';
-import connectMongo from 'connect-mongo';
+import methodOverride from 'method-override';
 import mongoose from 'mongoose';
+import morgan from 'morgan';
+import passport from 'passport';
+import path from 'path';
+import session from 'express-session';
+
 var MongoStore = connectMongo(session);
 
 export default function(app) {
   var env = app.get('env');
 
   app.set('views', `${config.root}/server/views`);
-  app.engine('html', require('ejs').renderFile);
+  app.engine('html', ejs.renderFile);
   app.set('view engine', 'html');
   app.use(compression());
   app.use(bodyParser.urlencoded({
@@ -69,7 +72,7 @@ export default function(app) {
   }
 
   if ('development' === env) {
-    app.use(require('connect-livereload')({
+    app.use(livereload({
       ignore: [
         /^\/api\/(.*)/,
         /\.js(\?.*)?$/, /\.css(\?.*)?$/, /\.svg(\?.*)?$/, /\.ico(\?.*)?$/, /\.woff(\?.*)?$/,

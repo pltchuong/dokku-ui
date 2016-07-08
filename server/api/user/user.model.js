@@ -19,7 +19,7 @@ var UserSchema = new mongoose.Schema({
   updated_at: Date
 });
 
-UserSchema.pre('save', function(next) {
+UserSchema.pre('save', (next) => {
   if (!this.created_at) {
     this.created_at = Date.now();
   }
@@ -27,28 +27,25 @@ UserSchema.pre('save', function(next) {
   next();
 });
 
-UserSchema
-  .pre('save', function(next) {
-    // Handle new/update passwords
-    if (!this.isModified('password')) {
-      return next();
-    }
+UserSchema.pre('save', (next) => {
+  if (!this.isModified('password')) {
+    return next();
+  }
 
-    // Make salt with a callback
-    this.makeSalt((saltErr, salt) => {
-      if (saltErr) {
-        return next(saltErr);
+  this.makeSalt((saltErr, salt) => {
+    if (saltErr) {
+      return next(saltErr);
+    }
+    this.salt = salt;
+    this.encryptPassword(this.password, (encryptErr, hashedPassword) => {
+      if (encryptErr) {
+        return next(encryptErr);
       }
-      this.salt = salt;
-      this.encryptPassword(this.password, (encryptErr, hashedPassword) => {
-        if (encryptErr) {
-          return next(encryptErr);
-        }
-        this.password = hashedPassword;
-        next();
-      });
+      this.password = hashedPassword;
+      next();
     });
   });
+});
 
 UserSchema.methods = {
   authenticate(password, callback) {
