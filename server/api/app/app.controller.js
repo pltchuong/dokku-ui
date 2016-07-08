@@ -40,9 +40,6 @@ function respondWithBlank(res, statusCode) {
 function saveUpdates(updates) {
   return function(entity) {
     if (entity) {
-      sendEmail(_.difference(entity.collaborators, updates.collaborators), 'collaborator-removed', entity);
-      sendEmail(_.difference(updates.collaborators, entity.collaborators), 'collaborator-added', entity);
-
       var updated = _.extend(entity, updates);
       return updated
         .save()
@@ -120,7 +117,7 @@ function findOneByUniqueProperty(uniqueProperty) {
   };
 }
 
-function sendEmail(recipients, template, app) {
+function sendEmail(recipients, template, app, req) {
   if(recipients.length > 0) {
     return Q
       .fcall(() => {
@@ -206,6 +203,11 @@ export function update(req, res) {
   return Q
     .fcall(handleParameters(req, res, ['id']))
     .then(findOneByUniqueProperty(req.params.id))
+    .then((app) => {
+      sendEmail(_.difference(app.collaborators, req.body.collaborators), 'collaborator-removed', app, req);
+      sendEmail(_.difference(req.body.collaborators, app.collaborators), 'collaborator-added', app, req);
+      return app;
+    })
     .then(saveUpdates(req.body))
     .then(respondWithResult(res))
     .then(handleEntityNotFound(res))
