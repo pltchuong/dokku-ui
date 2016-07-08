@@ -10,6 +10,7 @@ import config from '../../config/environment';
 import email from 'emailjs';
 import emailtemplates from 'email-templates';
 import path from 'path';
+import url from 'url';
 
 function respondWithResult(res, statusCode) {
   return function(entity) {
@@ -138,6 +139,11 @@ function sendEmail(recipients, template, app) {
         users.forEach((user) => {
           new emailtemplates.EmailTemplate(path.join(config.email.templateDir, template))
             .render({
+              url: url.format({
+                protocol: req.protocol,
+                hostname: req.hostname,
+                port: config.port
+              }),
               user: user,
               app: app
             })

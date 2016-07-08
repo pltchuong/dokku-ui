@@ -4,7 +4,7 @@
       <h1>Hi <%= user.firstName %> <%= user.lastName %></h1>
       <p>&nbsp;</p>
       <p>You now have permission to work with app <b><%= app.name %></b></p>
-      <p><a class="btn" href="http://localhost:9000/apps/<%= app.name %>">Open</a></p>
+      <p><a class="btn" href="<%= url %>/apps/<%= app.name %>">Open</a></p>
       <p>&nbsp;</p>
       <p>Cheers,</p>
       <p>Dokku UI Team</p>

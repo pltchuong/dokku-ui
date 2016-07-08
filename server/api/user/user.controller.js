@@ -7,6 +7,7 @@ import config from '../../config/environment';
 import email from 'emailjs';
 import emailtemplates from 'email-templates';
 import path from 'path';
+import url from 'url';
 import uuid from 'node-uuid';
 
 function respondWithResult(res, statusCode) {
@@ -211,6 +212,11 @@ export var password = {
 
           new emailtemplates.EmailTemplate(path.join(config.email.templateDir, 'forgot-password'))
             .render({
+              url: url.format({
+                protocol: req.protocol,
+                hostname: req.hostname,
+                port: config.port
+              }),
               user: user
             })
             .then((response) => {

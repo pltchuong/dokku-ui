@@ -19,7 +19,7 @@ var UserSchema = new mongoose.Schema({
   updated_at: Date
 });
 
-UserSchema.pre('save', (next) => {
+UserSchema.pre('save', function(next) {
   if (!this.created_at) {
     this.created_at = Date.now();
   }
@@ -27,7 +27,7 @@ UserSchema.pre('save', (next) => {
   next();
 });
 
-UserSchema.pre('save', (next) => {
+UserSchema.pre('save', function(next) {
   if (!this.isModified('password')) {
     return next();
   }
