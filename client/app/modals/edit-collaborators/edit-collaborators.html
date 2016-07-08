@@ -6,7 +6,7 @@
         <h4 class="modal-title text-center">Edit collaborators</h4>
       </div>
       <div class="modal-body">
-        <ui-select multiple sortable="true" ng-model="vm.inputs.collaborators" close-on-select="false" ng-init="vm.resize(this)" on-remove="vm.resize(this)" on-select="vm.resize(this)">
+        <ui-select multiple sortable="true" ng-model="vm.inputs.collaborators" ng-init="vm.resize(this)" on-remove="vm.resize(this)" on-select="vm.resize(this)">
           <ui-select-match>{{$item.firstName}} {{$item.lastName}}</ui-select-match>
           <ui-select-choices repeat="user in vm.inputs.users | filter: $select.search">
             <div ng-bind-html="user.firstName + ' ' + user.lastName | highlight: $select.search"></div>
