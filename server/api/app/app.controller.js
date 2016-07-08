@@ -6,12 +6,26 @@ import path from 'path';
 import email from 'emailjs';
 import emailtemplates from 'email-templates';
 import config from '../../config/environment';
+import SSH from 'ssh-promise';
 import App from './app.model';
 import Activity from '../activity/activity.model';
 import User from '../user/user.model';
 
 function respondWithResult(res, statusCode) {
   return function(entity) {
+    if (entity) {
+      res
+        .status(statusCode || 200)
+        .json(entity)
+      ;
+    }
+    return entity;
+  };
+}
+
+function respondWithBlank(res, statusCode) {
+  return function(entity) {
+    entity = entity ? {} : null;
     if (entity) {
       res
         .status(statusCode || 200)
@@ -75,16 +89,33 @@ function handleError(res, statusCode) {
   };
 }
 
-function appIdOrName(appIdOrName) {
-  return {
-    $or: [
-      {
-        _id: appIdOrName
-      },
-      {
-        name: appIdOrName
-      }
-    ]
+function findAll() {
+  return function() {
+    return App
+      .find()
+      .sort('name')
+      .populate('collaborators', 'username firstName lastName email')
+      .exec()
+    ;
+  };
+}
+
+function findOneByUniqueProperty(uniqueProperty) {
+  return function() {
+    return App
+      .findOne({
+        $or: [
+          {
+            _id: uniqueProperty
+          },
+          {
+            name: uniqueProperty
+          }
+        ]
+      })
+      .populate('collaborators', 'username firstName lastName email')
+      .exec()
+    ;
   };
 }
 
@@ -134,14 +165,7 @@ function sendEmail(recipients, template, app) {
 export function index(req, res) {
   return Q
     .fcall(handleParameters(req, res, []))
-    .then(() => {
-      return App
-        .find()
-        .sort('name')
-        .populate('collaborators', 'username firstName lastName email')
-        .exec()
-      ;
-    })
+    .then(findAll())
     .then(respondWithResult(res))
     .catch(handleError(res))
   ;
@@ -150,21 +174,23 @@ export function index(req, res) {
 export function show(req, res) {
   return Q
     .fcall(handleParameters(req, res, ['id']))
-    .then(() => {
-      return App
-        .findOne(appIdOrName(req.params.id))
-        .populate('collaborators', 'username firstName lastName email')
-        .exec()
-      ;
-    })
-    .then(handleEntityNotFound(res))
+    .then(findOneByUniqueProperty(req.params.id))
     .then(respondWithResult(res))
+    .then(handleEntityNotFound(res))
     .catch(handleError(res))
   ;
 }
 
-export function create() {
-  // ssh
+export function create(req, res) {
+  return Q
+    .fcall(handleParameters(req, res, ['name']))
+    .then(() => {
+      var ssh = new SSH(config.ssh);
+      return ssh.exec(`dokku apps:create ${req.body.name}`);
+    })
+    .then(respondWithResult(res, 201))
+    .catch(handleError(res))
+  ;
 }
 
 export function update(req, res) {
@@ -173,26 +199,68 @@ export function update(req, res) {
   }
   return Q
     .fcall(handleParameters(req, res, ['id']))
-    .then(() => {
-      return App
-        .findOne(appIdOrName(req.params.id))
-        .exec()
-      ;
-    })
-    .then(handleEntityNotFound(res))
+    .then(findOneByUniqueProperty(req.params.id))
     .then(saveUpdates(req.body))
     .then(respondWithResult(res))
+    .then(handleEntityNotFound(res))
     .catch(handleError(res))
   ;
 }
 
 
-export function destroy() {
-  // ssh
+export function destroy(req, res) {
+  return Q
+    .fcall(handleParameters(req, res, ['name']))
+    .then(() => {
+      var ssh = new SSH(config.ssh);
+      return ssh.exec(`echo ${req.body.name} | dokku apps:destroy ${req.body.name}`);
+    })
+    .then(respondWithResult(res, 201))
+    .catch(handleError(res))
+  ;
 }
 
-export function configs() {
-  // ssh
+export function configs(req, res) {
+  var ssh = new SSH(config.ssh);
+
+  return Q
+    .fcall(handleParameters(req, res, ['id']))
+    .then(findOneByUniqueProperty(req.params.id))
+    .then((app) => {
+      if (app) {
+        var commands = [];
+        var set = '';
+        var unset = '';
+        for(var key in req.body) {
+          var value = req.body[key];
+          if(value === null) {
+            unset += key;
+          } else {
+            set += `${key}=${value}`;
+          }
+        }
+        if (set) {
+          commands.push(`dokku config:set --no-restart ${app.name} ${set} > /dev/null`);
+        }
+        if (unset) {
+          commands.push(`dokku config:unset --no-restart ${app.name} ${unset} > /dev/null`);
+        }
+
+        return ssh.exec(commands);
+      }
+      return null;
+    })
+    .then(respondWithBlank(res))
+    .then(findOneByUniqueProperty(req.params.id))
+    .then((app) => {
+      if (app) {
+        return ssh.exec(`dokku ps:restart ${app.name} > /dev/null`);
+      }
+      return null;
+    })
+    .then(handleEntityNotFound(res))
+    .catch(handleError(res))
+  ;
 }
 
 export var activities = {
@@ -200,12 +268,7 @@ export var activities = {
   index(req, res) {
     return Q
       .fcall(handleParameters(req, res, ['id']))
-      .then(() => {
-        return App
-          .findOne(appIdOrName(req.params.id))
-          .exec()
-        ;
-      })
+      .then(findOneByUniqueProperty(req.params.id))
       .then((app) => {
         return Activity
           .find({
@@ -218,6 +281,7 @@ export var activities = {
         ;
       })
       .then(respondWithResult(res))
+      .then(handleEntityNotFound(res))
       .catch(handleError(res))
     ;
   },
@@ -225,12 +289,7 @@ export var activities = {
   show(req, res) {
     return Q
       .fcall(handleParameters(req, res, ['id', 'activity']))
-      .then(() => {
-        return App
-          .findOne(appIdOrName(req.params.id))
-          .exec()
-        ;
-      })
+      .then(findOneByUniqueProperty(req.params.id))
       .then((app) => {
         return Activity
           .findOne({
@@ -243,6 +302,7 @@ export var activities = {
         ;
       })
       .then(respondWithResult(res))
+      .then(handleEntityNotFound(res))
       .catch(handleError(res))
     ;
   }

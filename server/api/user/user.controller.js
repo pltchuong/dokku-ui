@@ -101,28 +101,44 @@ function handleError(res, statusCode) {
   };
 }
 
-function userIdOrUsername(userIdOrUsername) {
-  return {
-    $or: [
-      {
-        _id: userIdOrUsername
-      },
-      {
-        username: userIdOrUsername
-      }
-    ]
+function findAll() {
+  return function() {
+    return User
+      .find({}, '-salt -password -token')
+      .sort('firstName')
+      .exec()
+    ;
+  };
+}
+
+function findOneByUniqueProperty(uniqueProperty) {
+  return function() {
+    return User
+      .findOne({
+        $or: [
+          {
+            _id: uniqueProperty
+          },
+          {
+            username: uniqueProperty
+          },
+          {
+            email: uniqueProperty
+          },
+          {
+            token: uniqueProperty
+          }
+        ]
+      }, '-salt -password -token')
+      .exec()
+    ;
   };
 }
 
 export function index(req, res) {
   return Q
     .fcall(handleParameters(req, res, []))
-    .then(() => {
-      return User
-        .find({}, '-salt -password -token')
-        .exec()
-      ;
-    })
+    .then(findAll())
     .then(respondWithResult(res))
     .catch(handleError(res))
   ;
@@ -131,21 +147,16 @@ export function index(req, res) {
 export function show(req, res) {
   return Q
     .fcall(handleParameters(req, res, ['id']))
-    .then(() => {
-      return User
-        .findOne(userIdOrUsername(req.params.id), '-salt -password -token')
-        .exec()
-      ;
-    })
-    .then(handleEntityNotFound(res))
+    .then(findOneByUniqueProperty(req.params.id))
     .then(respondWithResult(res))
+    .then(handleEntityNotFound(res))
     .catch(handleError(res))
   ;
 }
 
 export function create(req, res) {
   return Q
-    .fcall(handleParameters(req, res, []))
+    .fcall(handleParameters(req, res, ['username', 'email', 'firstName', 'lastName', 'password']))
     .then(() => {
       return User.create(req.body);
     })
@@ -160,15 +171,10 @@ export function update(req, res) {
   }
   return Q
     .fcall(handleParameters(req, res, ['id']))
-    .then(() => {
-      return User
-        .findOne(userIdOrUsername(req.params.id), '-salt -password -token')
-        .exec()
-      ;
-    })
-    .then(handleEntityNotFound(res))
+    .then(findOneByUniqueProperty(req.params.id))
     .then(saveUpdates(req.body))
     .then(respondWithResult(res))
+    .then(handleEntityNotFound(res))
     .catch(handleError(res))
   ;
 }
@@ -176,14 +182,9 @@ export function update(req, res) {
 export function destroy(req, res) {
   return Q
     .fcall(handleParameters(req, res, ['id']))
-    .then(() => {
-      return User
-        .findOne(userIdOrUsername(req.params.id), '-salt -password -token')
-        .exec()
-      ;
-    })
-    .then(handleEntityNotFound(res))
+    .then(findOneByUniqueProperty(req.params.id))
     .then(removeEntity(res))
+    .then(handleEntityNotFound(res))
     .catch(handleError(res))
   ;
 }
@@ -191,16 +192,9 @@ export function destroy(req, res) {
 export function me(req, res) {
   return Q
     .fcall(handleParameters(req, res, []))
-    .then(() => {
-      return User
-        .findOne({
-          _id: req.user._id
-        }, '-salt -password -token')
-        .exec()
-      ;
-    })
-    .then(handleEntityNotFound(res))
+    .then(findOneByUniqueProperty(req.user._id))
     .then(respondWithResult(res))
+    .then(handleEntityNotFound(res))
     .catch(handleError(res))
   ;
 }
@@ -210,45 +204,38 @@ export var password = {
   request(req, res) {
     return Q
       .fcall(handleParameters(req, res, ['email']))
-      .then(() => {
-        return User
-          .findOne({
-            'email': req.body.email
-          }, '-salt -password -token')
-          .exec()
-          .then((user) => {
-            if (user) {
-              user.token = uuid.v1();
+      .then(findOneByUniqueProperty(req.body.email))
+      .then((user) => {
+        if (user) {
+          user.token = uuid.v1();
 
-              new emailtemplates.EmailTemplate(path.join(config.email.templateDir, 'forgot-password'))
-                .render({
-                  user: user
-                })
-                .then((response) => {
-                  var server = email.server.connect(config.email.smtp);
-                  var message = {
-                    text: response.text,
-                    from: config.email.from,
-                    to: req.body.email,
-                    subject: response.subject,
-                    attachment: [
-                      {
-                        data: response.html,
-                        alternative: true
-                      }
-                    ]
-                  };
-                  server.send(message);
-                })
-              ;
-            }
-            return user;
-          })
-        ;
+          new emailtemplates.EmailTemplate(path.join(config.email.templateDir, 'forgot-password'))
+            .render({
+              user: user
+            })
+            .then((response) => {
+              var server = email.server.connect(config.email.smtp);
+              var message = {
+                text: response.text,
+                from: config.email.from,
+                to: req.body.email,
+                subject: response.subject,
+                attachment: [
+                  {
+                    data: response.html,
+                    alternative: true
+                  }
+                ]
+              };
+              server.send(message);
+            })
+          ;
+        }
+        return user;
       })
-      .then(handleEntityNotFound(res))
       .then(saveUpdates({}))
       .then(respondWithBlank(res))
+      .then(handleEntityNotFound(res))
       .catch(handleError(res))
     ;
   },
@@ -256,24 +243,17 @@ export var password = {
   reset(req, res) {
     return Q
       .fcall(handleParameters(req, res, ['token', 'password']))
-      .then(() => {
-        return User
-          .findOne({
-            'token': req.body.token
-          }, '-salt -password -token')
-          .exec()
-          .then((user) => {
-            if (user) {
-              user.password = req.body.password;
-              user.token = undefined;
-            }
-            return user;
-          })
-        ;
+      .then(findOneByUniqueProperty(req.body.token))
+      .then((user) => {
+        if (user) {
+          user.password = req.body.password;
+          user.token = undefined;
+        }
+        return user;
       })
-      .then(handleEntityNotFound(res))
       .then(saveUpdates({}))
       .then(respondWithBlank(res))
+      .then(handleEntityNotFound(res))
       .catch(handleError(res))
     ;
   }

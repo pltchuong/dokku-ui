@@ -2,6 +2,7 @@
 
 var path = require('path');
 var _ = require('lodash');
+var fs = require('fs');
 
 // All configurations will extend these options
 // ============================================
@@ -34,6 +35,7 @@ var all = {
     }
   },
 
+  // Email options
   email: {
     smtp: {
       user: 'dokku@imphan.com',
@@ -43,6 +45,14 @@ var all = {
     },
     from: 'Phan Chuong <pltchuong@gmail.com>',
     templateDir: __dirname + '/../../views/emails'
+  },
+
+  // SSH options
+  ssh: {
+    host: 'apps.solutionsresource.com',
+    username: 'srllc',
+    privateKey: fs.readFileSync('/Users/pltchuong/.ssh/id_rsa'),
+    passphrase: 'believe9'
   }
 };
 

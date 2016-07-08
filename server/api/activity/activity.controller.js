@@ -39,18 +39,22 @@ function handleError(res, statusCode) {
   };
 }
 
+function findAll() {
+  return function() {
+    return Activity
+      .find()
+      .populate('user', 'username firstName lastName email')
+      .populate('app', 'name')
+      .sort('-created_at')
+      .exec()
+    ;
+  };
+}
+
 export function index(req, res) {
   return Q
     .fcall(handleParameters(req, res, []))
-    .then(() => {
-      return Activity
-        .find()
-        .populate('user', 'username firstName lastName email')
-        .populate('app', 'name')
-        .sort('-created_at')
-        .exec()
-      ;
-    })
+    .then(findAll())
     .then(respondWithResult(res))
     .catch(handleError(res))
   ;
