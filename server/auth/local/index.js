@@ -1,8 +1,8 @@
 'use strict';
 
+import * as auth from '../auth.service';
 import express from 'express';
 import passport from 'passport';
-import signToken from '../auth.service';
 
 var router = express.Router();
 
@@ -19,12 +19,12 @@ router.post('/', (req, res, next) => {
       return res
         .status(404)
         .json({
-          message: 'Something went wrong, please try again.'
+          data: 'Something went wrong, please try again.'
         })
       ;
     }
 
-    var token = signToken(user._id, user.role);
+    var token = auth.signToken(user._id, user.role);
     res.json({
       token
     });
