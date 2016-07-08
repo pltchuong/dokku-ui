@@ -12,7 +12,7 @@ class SettingsController {
   fetch() {
     if (this.$stateParams.app) {
       this.$http
-        .get('/api/apps/' + this.$stateParams.app)
+        .get(`/api/apps/${this.$stateParams.app}`)
         .then((response) => {
           this.app = response.data;
         })

@@ -17,7 +17,7 @@ angular
       syncUpdates(modelName, array, cb) {
         cb = cb || angular.noop;
 
-        socket.on(modelName + ':save', (item) => {
+        socket.on(`${modelName}:save`, (item) => {
           var oldItem = _.find(array, {
             _id: item._id
           });
@@ -34,7 +34,7 @@ angular
           cb(event, item, array);
         });
 
-        socket.on(modelName + ':remove', (item) => {
+        socket.on(`${modelName}:remove`, (item) => {
           var event = 'deleted';
           _.remove(array, {
             _id: item._id
@@ -44,8 +44,8 @@ angular
       },
 
       unsyncUpdates(modelName) {
-        socket.removeAllListeners(modelName + ':save');
-        socket.removeAllListeners(modelName + ':remove');
+        socket.removeAllListeners(`${modelName}:save`);
+        socket.removeAllListeners(`${modelName}:remove`);
       }
     };
   })

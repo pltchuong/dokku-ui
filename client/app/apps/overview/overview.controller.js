@@ -13,7 +13,7 @@ class OverviewController {
   fetch() {
     if (this.$stateParams.app) {
       this.$http
-        .get('/api/apps/' + this.$stateParams.app)
+        .get(`/api/apps/${this.$stateParams.app}`)
         .then((response) => {
           this.app = response.data;
         })
@@ -27,7 +27,7 @@ class OverviewController {
     var config = {};
     config[this.key] = this.value;
     this.$http
-      .patch('/api/apps/' + this.$stateParams.app + '/configs', config)
+      .patch(`/api/apps/${this.$stateParams.app}/configs`, config)
       .then(() => {
         this.key = this.value = null;
         this.fetch();
@@ -52,7 +52,7 @@ class OverviewController {
           var config = {};
           config[result.key] = result.value;
           this.$http
-            .patch('/api/apps/' + this.$stateParams.app + '/configs', config)
+            .patch(`/api/apps/${this.$stateParams.app}/configs`, config)
             .then(() => {
               this.key = this.value = null;
               this.fetch();
@@ -80,7 +80,7 @@ class OverviewController {
           var config = {};
           config[result.key] = null;
           this.$http
-            .patch('/api/apps/' + this.$stateParams.app + '/configs', config)
+            .patch(`/api/apps/${this.$stateParams.app}/configs`, config)
             .then(() => {
               this.key = this.value = null;
               this.fetch();

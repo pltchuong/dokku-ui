@@ -13,7 +13,7 @@ class AccessController {
   fetch() {
     if (this.$stateParams.app) {
       this.$http
-        .get('/api/apps/' + this.$stateParams.app)
+        .get(`/api/apps/${this.$stateParams.app}`)
         .then((response) => {
           this.app = response.data;
         })
@@ -40,7 +40,7 @@ class AccessController {
             return user._id;
           });
           this.$http
-            .put('/api/apps/' + app.name, app)
+            .put(`/api/apps/${app.name}`, app)
             .then(() => {
               this.fetch();
             })

@@ -11,7 +11,7 @@ function onConnect(socket) {
 
 export default function(socketio) {
   socketio.on('connection', (socket) => {
-    socket.address = socket.request.connection.remoteAddress + ':' + socket.request.connection.remotePort;
+    socket.address = `${socket.request.connection.remoteAddress} : ${socket.request.connection.remotePort}`;
     socket.connectedAt = new Date();
     socket.log = function(...data) {
       console.log(`SocketIO ${socket.nsp.name} [${socket.address}]`, ...data);

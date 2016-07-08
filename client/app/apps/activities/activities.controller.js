@@ -12,7 +12,7 @@ class ActivitiesController {
   fetch() {
     if (this.$stateParams.app) {
       this.$http
-        .get('/api/apps/' + this.$stateParams.app + '/activities')
+        .get(`/api/apps/${this.$stateParams.app}/activities`)
         .then((response) => {
           this.activities = response.data;
         })

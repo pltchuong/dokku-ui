@@ -10,7 +10,7 @@ var all = {
   env: process.env.NODE_ENV,
 
   // Root path of server
-  root: path.normalize(__dirname + '/../../..'),
+  root: path.normalize(`${__dirname}/../../..`),
 
   // Server port
   port: process.env.PORT || 9000,
@@ -44,7 +44,7 @@ var all = {
       tls: 465
     },
     from: 'Phan Chuong <pltchuong@gmail.com>',
-    templateDir: __dirname + '/../../views/emails'
+    templateDir: `${__dirname}/../../views/emails`
   },
 
   // SSH options
@@ -61,4 +61,4 @@ var all = {
 module.exports = _.merge(
   all,
   require('./shared'),
-  require('./' + process.env.NODE_ENV + '.js') || {});
+  require(`./${process.env.NODE_ENV}.js`) || {});
